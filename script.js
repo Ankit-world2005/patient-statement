@@ -55,6 +55,7 @@
     loginView: document.getElementById('loginView'),
     welcomeView: document.getElementById('welcomeView'),
     homeView: document.getElementById('homeView'),
+    dashboardView: document.getElementById('dashboardView'),
 
     // Top Bar & Theme
     themeToggleBtn: document.getElementById('themeToggleBtn'),
@@ -107,14 +108,20 @@
 
     // Middle of Homepage: 3 Operation Cards
     cardArReport: document.getElementById('cardArReport'),
-    openArReportBtn: document.getElementById('openArReportBtn'),
     cardClinicCollection: document.getElementById('cardClinicCollection'),
-    openClinicCollectionBtn: document.getElementById('openClinicCollectionBtn'),
     cardPatientStatement: document.getElementById('cardPatientStatement'),
-    openPatientStatementBtn: document.getElementById('openPatientStatementBtn'),
-    hubPatientBalance: document.getElementById('hubPatientBalance'),
-    hubInsurancePaid: document.getElementById('hubInsurancePaid'),
-    patientStatementsSection: document.getElementById('patientStatementsSection'),
+
+    // Patient Statement Dashboard Page Elements
+    backToHomeBtn: document.getElementById('backToHomeBtn'),
+    dashMetaUserId: document.getElementById('dashMetaUserId'),
+    dashMetaClinic: document.getElementById('dashMetaClinic'),
+    dashHolderName: document.getElementById('dashHolderName'),
+    pageTotalBilled: document.getElementById('pageTotalBilled'),
+    pageInsurancePaid: document.getElementById('pageInsurancePaid'),
+    pagePatientBalance: document.getElementById('pagePatientBalance'),
+    dashPayAmount: document.getElementById('dashPayAmount'),
+    pagePrintBtn: document.getElementById('pagePrintBtn'),
+    pagePayBtn: document.getElementById('pagePayBtn'),
 
     // Homepage Patient Statement Detail Elements
     homePayStatementBtn: document.getElementById('homePayStatementBtn'),
@@ -231,21 +238,39 @@
     if (elements.loginView) elements.loginView.style.display = 'none';
     if (elements.welcomeView) elements.welcomeView.style.display = 'none';
     if (elements.homeView) elements.homeView.style.display = 'none';
+    if (elements.dashboardView) elements.dashboardView.style.display = 'none';
 
     const hipaaBanner = document.querySelector('.hipaa-top-banner');
 
     if (viewName === 'login') {
       if (elements.loginView) elements.loginView.style.display = 'block';
-      document.body.classList.remove('page-home');
+      document.body.classList.remove('page-home', 'page-dashboard');
       if (hipaaBanner) hipaaBanner.style.display = 'block';
     } else if (viewName === 'welcome') {
       if (elements.welcomeView) elements.welcomeView.style.display = 'flex';
-      document.body.classList.remove('page-home');
+      document.body.classList.remove('page-home', 'page-dashboard');
       if (hipaaBanner) hipaaBanner.style.display = 'block';
     } else if (viewName === 'home') {
       if (elements.homeView) elements.homeView.style.display = 'flex';
       document.body.classList.add('page-home');
+      document.body.classList.remove('page-dashboard');
       if (hipaaBanner) hipaaBanner.style.display = 'none';
+    } else if (viewName === 'dashboard') {
+      if (elements.dashboardView) elements.dashboardView.style.display = 'flex';
+      document.body.classList.add('page-dashboard');
+      document.body.classList.remove('page-home');
+      if (hipaaBanner) hipaaBanner.style.display = 'none';
+
+      // Populate statement dashboard details
+      const user = state.activeUser || demoPatient;
+      const clinicVal = (elements.clinicSelect ? elements.clinicSelect.value : null) || user.clinic || 'Namaste';
+      if (elements.dashMetaUserId) elements.dashMetaUserId.textContent = user.userId || user.mrn || 'US24-84920';
+      if (elements.dashMetaClinic) elements.dashMetaClinic.textContent = clinicVal;
+      if (elements.dashHolderName) elements.dashHolderName.textContent = user.name;
+      if (elements.pageTotalBilled) elements.pageTotalBilled.textContent = user.totalBilled || '$1,450.00';
+      if (elements.pageInsurancePaid) elements.pageInsurancePaid.textContent = user.insurancePaid || '-$1,105.00';
+      if (elements.pagePatientBalance) elements.pagePatientBalance.textContent = user.balance || '$345.00';
+      if (elements.dashPayAmount) elements.dashPayAmount.textContent = user.balance || '$345.00';
     }
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -694,74 +719,42 @@
     }
 
     // ========================================================================
-    // HOMEPAGE 3 MIDDLE CARDS INTERACTION (ONLY THREE CARDS WITH PURE TITLES)
+    // HOMEPAGE 3 MIDDLE CARDS INTERACTION
+    // - AR Report & Clinic Collection are FROZEN (no actions, no marks)
+    // - Patient Statement taps open the dedicated new page dashboard
     // ========================================================================
-    // Card 1: AR Report
-    if (elements.cardArReport) {
-      const openAr = () => {
-        if (elements.arReportModalBackdrop) elements.arReportModalBackdrop.style.display = 'flex';
-      };
-      elements.cardArReport.addEventListener('click', openAr);
-      elements.cardArReport.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          openAr();
-        }
-      });
-    }
-    if (elements.closeArBtn) {
-      elements.closeArBtn.addEventListener('click', () => {
-        elements.arReportModalBackdrop.style.display = 'none';
-      });
-    }
-    if (elements.ackArBtn) {
-      elements.ackArBtn.addEventListener('click', () => {
-        elements.arReportModalBackdrop.style.display = 'none';
-      });
-    }
-    if (elements.printArBtn) {
-      elements.printArBtn.addEventListener('click', () => window.print());
-    }
+    // Card 1: AR Report (FROZEN - no actions, no marks)
+    // Card 2: Clinic Collection (FROZEN - no actions, no marks)
 
-    // Card 2: Clinic Collection
-    if (elements.cardClinicCollection) {
-      const openCollection = () => {
-        if (elements.clinicCollectionModalBackdrop) elements.clinicCollectionModalBackdrop.style.display = 'flex';
-      };
-      elements.cardClinicCollection.addEventListener('click', openCollection);
-      elements.cardClinicCollection.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          openCollection();
-        }
-      });
-    }
-    if (elements.closeCollectionBtn) {
-      elements.closeCollectionBtn.addEventListener('click', () => {
-        elements.clinicCollectionModalBackdrop.style.display = 'none';
-      });
-    }
-    if (elements.ackCollectionBtn) {
-      elements.ackCollectionBtn.addEventListener('click', () => {
-        elements.clinicCollectionModalBackdrop.style.display = 'none';
-      });
-    }
-    if (elements.printCollectionBtn) {
-      elements.printCollectionBtn.addEventListener('click', () => window.print());
-    }
-
-    // Card 3: Patient Statement
+    // Card 3: Patient Statement (Tapping opens the new page dashboard)
     if (elements.cardPatientStatement) {
-      const openStatement = () => {
-        openDashboardModal();
+      const openStatementPage = () => {
+        showView('dashboard');
       };
-      elements.cardPatientStatement.addEventListener('click', openStatement);
+      elements.cardPatientStatement.addEventListener('click', openStatementPage);
       elements.cardPatientStatement.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          openStatement();
+          openStatementPage();
         }
       });
+    }
+
+    // ========================================================================
+    // NEW PATIENT STATEMENT PAGE DASHBOARD EVENTS
+    // ========================================================================
+    if (elements.backToHomeBtn) {
+      elements.backToHomeBtn.addEventListener('click', () => {
+        showView('home');
+      });
+    }
+
+    if (elements.pagePrintBtn) {
+      elements.pagePrintBtn.addEventListener('click', () => window.print());
+    }
+
+    if (elements.pagePayBtn) {
+      elements.pagePayBtn.addEventListener('click', () => handlePaymentAction('$345.00'));
     }
 
     // Clinic Selector Change Event (Namaste, Arra, Icure, HariKrishna, Meyerland)

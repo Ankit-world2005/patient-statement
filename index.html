@@ -412,20 +412,181 @@
     <!-- Center of the page: ONLY the three cards and these cards mention ONLY their titles and nothing else -->
     <main class="hub-three-cards-section" role="main">
       <div class="hub-three-cards-grid">
-        <!-- Card 1: AR Report -->
-        <div class="minimal-hub-card card-ar" id="cardArReport" role="button" tabindex="0" title="Open AR Report">
+        <!-- Card 1: AR Report (Frozen - No action, no marks) -->
+        <div class="minimal-hub-card card-frozen card-ar" id="cardArReport">
           <h2 class="card-pure-title">AR Report</h2>
         </div>
 
-        <!-- Card 2: Clinic Collection -->
-        <div class="minimal-hub-card card-collection" id="cardClinicCollection" role="button" tabindex="0" title="Open Clinic Collection">
+        <!-- Card 2: Clinic Collection (Frozen - No action, no marks) -->
+        <div class="minimal-hub-card card-frozen card-collection" id="cardClinicCollection">
           <h2 class="card-pure-title">Clinic Collection</h2>
         </div>
 
-        <!-- Card 3: Patient Statement -->
-        <div class="minimal-hub-card card-statement" id="cardPatientStatement" role="button" tabindex="0" title="Open Patient Statement">
+        <!-- Card 3: Patient Statement (Active - Tapping opens the new page dashboard) -->
+        <div class="minimal-hub-card card-statement" id="cardPatientStatement" role="button" tabindex="0" title="Open Patient Statement Dashboard">
           <h2 class="card-pure-title">Patient Statement</h2>
         </div>
+      </div>
+    </main>
+  </section>
+
+  <!-- ==========================================================================
+       PATIENT STATEMENT NEW PAGE DASHBOARD
+       ========================================================================== -->
+  <section id="dashboardView" class="view-panel dashboard-page-screen" style="display: none;">
+    <!-- Dashboard Top Bar: Back to hub button, Patient/Clinic Info, and US24 Logo -->
+    <header class="dashboard-topbar">
+      <div class="dash-top-left">
+        <button type="button" class="btn-back-hub" id="backToHomeBtn" title="Back to Operations Hub">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+          <span>Back</span>
+        </button>
+        <span class="dash-meta-divider">|</span>
+        <div class="dash-patient-meta">
+          <span class="dash-meta-label">User ID:</span>
+          <strong class="dash-meta-val" id="dashMetaUserId">US24-84920</strong>
+          <span class="dash-meta-dot">•</span>
+          <span class="dash-meta-label">Clinic:</span>
+          <strong class="dash-meta-val" id="dashMetaClinic">Namaste</strong>
+        </div>
+      </div>
+
+      <div class="dash-top-right">
+        <div class="hipaa-secure-chip">
+          <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor">
+            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/>
+          </svg>
+          <span>HIPAA Encrypted</span>
+        </div>
+        <img src="assets/us24-logo.png" alt="US24 Solutions" class="dash-company-logo">
+      </div>
+    </header>
+
+    <!-- Main Content Area of the Dashboard -->
+    <main class="dashboard-main-content">
+      <div class="dashboard-container">
+        
+        <!-- Header Banner: Patient Statement Summary & Direct Actions -->
+        <div class="statement-banner">
+          <div class="banner-info-col">
+            <div class="statement-pill">Active Billing Statement</div>
+            <h1 class="statement-headline">Patient Statement #US-2026-98124</h1>
+            <p class="statement-patient-sub">
+              Account Holder: <strong id="dashHolderName">Sarah Jenkins</strong> &nbsp;•&nbsp; MRN: <strong>US-84920</strong> &nbsp;•&nbsp; Service Date: <strong>Oct 12, 2026</strong>
+            </p>
+          </div>
+          <div class="banner-action-col">
+            <button type="button" class="btn-dash-print" id="pagePrintBtn">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 6 2 18 2 18 9"/>
+                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+                <rect x="6" y="14" width="12" height="8"/>
+              </svg>
+              <span>Print / Save PDF</span>
+            </button>
+            <button type="button" class="btn-dash-pay" id="pagePayBtn">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                <line x1="1" y1="10" x2="23" y2="10"/>
+              </svg>
+              <span>Pay Outstanding Balance (<span id="dashPayAmount">$345.00</span>)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 3 Financial Summary Cards -->
+        <div class="dashboard-kpi-grid">
+          <div class="dash-kpi-card">
+            <div class="dash-kpi-label">Total Billed Charges</div>
+            <div class="dash-kpi-value" id="pageTotalBilled">$1,450.00</div>
+            <div class="dash-kpi-sub">Standard medical service charges</div>
+          </div>
+          <div class="dash-kpi-card">
+            <div class="dash-kpi-label">Insurance Covered</div>
+            <div class="dash-kpi-value text-green" id="pageInsurancePaid">-$1,105.00</div>
+            <div class="dash-kpi-sub">BlueCross BlueShield (In-Network)</div>
+          </div>
+          <div class="dash-kpi-card highlight-due">
+            <div class="dash-kpi-label">Patient Balance Due</div>
+            <div class="dash-kpi-value text-orange" id="pagePatientBalance">$345.00</div>
+            <div class="dash-kpi-sub">Payment Due Date: Nov 15, 2026</div>
+          </div>
+        </div>
+
+        <!-- Line-Item Statement Breakdown Table -->
+        <div class="dashboard-table-card">
+          <div class="table-card-header">
+            <div>
+              <h2 class="table-card-title">Itemized Clinical Services &amp; Adjustments</h2>
+              <p class="table-card-desc">Detailed breakdown of clinical codes (CPT), provider notes, and insurer contractual adjustments.</p>
+            </div>
+            <span class="statement-status-tag">Payment Pending</span>
+          </div>
+
+          <div class="table-responsive">
+            <table class="dashboard-statement-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>CPT &amp; Service Description</th>
+                  <th>Attending Provider</th>
+                  <th>Billed</th>
+                  <th>Insurance Paid</th>
+                  <th>Adjustment</th>
+                  <th>Patient Responsibility</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>10/12/2026</td>
+                  <td><strong>99214</strong> - Comprehensive Office Visit</td>
+                  <td>Dr. Robert Miller, MD</td>
+                  <td>$350.00</td>
+                  <td class="text-green">-$280.00</td>
+                  <td>-$30.00</td>
+                  <td><strong class="text-due">$40.00</strong></td>
+                </tr>
+                <tr>
+                  <td>10/12/2026</td>
+                  <td><strong>80053</strong> - Comprehensive Metabolic Panel</td>
+                  <td>Metro Labs Clinical</td>
+                  <td>$480.00</td>
+                  <td class="text-green">-$360.00</td>
+                  <td>-$45.00</td>
+                  <td><strong class="text-due">$75.00</strong></td>
+                </tr>
+                <tr>
+                  <td>10/12/2026</td>
+                  <td><strong>71046</strong> - Chest Radiography (2 Views)</td>
+                  <td>Diagnostic Radiology Center</td>
+                  <td>$620.00</td>
+                  <td class="text-green">-$465.00</td>
+                  <td>+$75.00</td>
+                  <td><strong class="text-due">$230.00</strong></td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="6" class="text-right"><strong>Total Patient Balance Due:</strong></td>
+                  <td class="text-total">$345.00</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+
+          <!-- Bottom Notice / Payment Security -->
+          <div class="dashboard-footer-note">
+            <div class="security-note-text">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9v-2h2v2zm0-4H9V7h2v5zm4 4h-2v-2h2v2zm0-4h-2V7h2v5z"/>
+              </svg>
+              <span>Transactions are encrypted with 256-bit SSL/TLS and processed in compliance with HIPAA &amp; PCI-DSS standards. For billing queries: <strong>contact@us24solutions.com</strong> | <strong>+1-309-364-6427</strong></span>
+            </div>
+          </div>
+        </div>
+
       </div>
     </main>
   </section>
