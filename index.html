@@ -152,48 +152,21 @@
         <!-- Card Header -->
         <div class="card-header">
           <div class="auth-title-row">
-            <h2 class="auth-title">Portal Access Login</h2>
-            <span class="security-chip" title="Encrypted Connection">
+            <h2 class="auth-title">Patient Statement Login</h2>
+            <span class="security-chip" title="HIPAA Verified Connection">
               <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor">
                 <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
               </svg>
-              TLS 1.3
+              HIPAA Verified
             </span>
           </div>
-          <p class="auth-subtitle">Select your account type to access statements, claim histories, and invoices.</p>
-
-          <!-- Role Selector Tabs -->
-          <div class="role-tabs-container" role="tablist" aria-label="Portal User Roles">
-            <button class="role-tab active" id="tabPatient" role="tab" aria-selected="true" aria-controls="patientTabContent" data-role="patient">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                <circle cx="12" cy="7" r="4"/>
-              </svg>
-              <span>Patient / Guarantor</span>
-            </button>
-            <button class="role-tab" id="tabProvider" role="tab" aria-selected="false" aria-controls="providerTabContent" data-role="provider">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
-              </svg>
-              <span>Provider / Clinic</span>
-            </button>
-            <button class="role-tab" id="tabStaff" role="tab" aria-selected="false" aria-controls="staffTabContent" data-role="staff">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
-                <line x1="8" y1="21" x2="16" y2="21"/>
-                <line x1="12" y1="17" x2="12" y2="21"/>
-              </svg>
-              <span>US24 Staff SSO</span>
-            </button>
-          </div>
+          <p class="auth-subtitle">Sign in to securely access your medical billing statements, view insurance details, and pay balances.</p>
         </div>
 
-        <!-- Quick Demo Profiles Strip -->
-        <div class="demo-profiles-strip" aria-label="Quick Demo Autofill Credentials">
-          <span class="demo-label">Demo Presets:</span>
-          <button type="button" class="demo-btn" id="demoPatientBtn" data-target="patient">Patient Demo</button>
-          <button type="button" class="demo-btn" id="demoProviderBtn" data-target="provider">Clinic Doctor</button>
-          <button type="button" class="demo-btn" id="demoStaffBtn" data-target="staff">RCM Billing Agent</button>
+        <!-- Quick Demo Autofill Helper -->
+        <div class="demo-profiles-strip" aria-label="Demo Credentials Helper">
+          <span class="demo-label">Demo Test:</span>
+          <button type="button" class="demo-btn" id="autofillDemoBtn">Auto-fill Demo Patient Credentials</button>
         </div>
 
         <!-- Feedback Alert Container -->
@@ -208,7 +181,7 @@
           <!-- Dynamic Primary Identifier Field -->
           <div class="form-group" id="identifierGroup">
             <label for="primaryIdentifier" class="form-label" id="identifierLabel">
-              Patient Email or Medical Record # (MRN)
+              Patient Email, Account #, or Statement #
               <span class="required-star">*</span>
             </label>
             <div class="input-wrapper">
@@ -223,13 +196,13 @@
                 id="primaryIdentifier" 
                 name="identifier" 
                 class="form-input" 
-                placeholder="e.g. sarah.johnson@example.com or MRN-84920" 
+                placeholder="e.g. sarah.jenkins@example.com or STMT-84920" 
                 autocomplete="username" 
                 required
                 aria-required="true"
                 aria-describedby="identifierError">
             </div>
-            <span class="input-error-msg" id="identifierError" role="alert">Please provide a valid email, MRN, or Provider ID.</span>
+            <span class="input-error-msg" id="identifierError" role="alert">Please provide a valid email, Account #, or Statement #.</span>
           </div>
 
           <!-- Secondary Patient Field (Only shown for Patient tab: Date of Birth verification) -->

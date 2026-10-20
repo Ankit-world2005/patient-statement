@@ -1,9 +1,9 @@
 /**
  * US24 Solutions - Patient Statement Portal
- * HIPAA-Compliant Authentication & Patient Statement Showcase
+ * HIPAA-Compliant Single Authentication Page & Patient Statement Showcase
  * 
  * Features:
- * - Multi-persona authentication (Patient, Provider, US24 Staff SSO)
+ * - Single, unified Patient Statement login page
  * - HIPAA 15-minute inactivity session lock timer
  * - Two-factor authentication (MFA/OTP) simulation
  * - Interactive Patient Statement Dashboard with line-item claims & PDF printing
@@ -16,7 +16,6 @@
 
   // State Management
   const state = {
-    currentRole: 'patient',
     theme: localStorage.getItem('us24_theme') || 'light',
     sessionTimeLeft: 15 * 60, // 15 minutes in seconds
     timerInterval: null,
@@ -24,38 +23,16 @@
     activeUser: null,
   };
 
-  // Predefined Demo Profiles for Easy Testing
-  const demoProfiles = {
-    patient: {
-      identifier: 'sarah.jenkins@example.com',
-      dob: '1988-06-14',
-      password: 'US24@PatientStatement2026',
-      name: 'Sarah Jenkins',
-      mrn: 'US-84920',
-      balance: '$345.00',
-      totalBilled: '$1,450.00',
-      insurancePaid: '-$1,105.00',
-    },
-    provider: {
-      identifier: 'dr.miller@metrohealth.org',
-      dob: '1975-03-22',
-      password: 'MetroClinic@Provider2026',
-      name: 'Dr. Robert Miller, MD',
-      mrn: 'NPI-1948201948',
-      balance: '$12,480.00',
-      totalBilled: '$54,200.00',
-      insurancePaid: '-$41,720.00',
-    },
-    staff: {
-      identifier: 'billing.agent@us24solutions.com',
-      dob: '1992-11-05',
-      password: 'US24#RCMBilling2026!',
-      name: 'Michael Vance (US24 RCM Lead)',
-      mrn: 'STAFF-US24-048',
-      balance: '$184,920.00',
-      totalBilled: '$840,120.00',
-      insurancePaid: '-$655,200.00',
-    }
+  // Predefined Demo Patient Profile for Easy Testing
+  const demoPatient = {
+    identifier: 'sarah.jenkins@example.com',
+    dob: '1988-06-14',
+    password: 'US24@PatientStatement2026',
+    name: 'Sarah Jenkins',
+    mrn: 'US-84920',
+    balance: '$345.00',
+    totalBilled: '$1,450.00',
+    insurancePaid: '-$1,105.00',
   };
 
   // DOM Elements
@@ -64,15 +41,8 @@
     themeToggleBtn: document.getElementById('themeToggleBtn'),
     timerCountdown: document.getElementById('timerCountdown'),
 
-    // Role Tabs
-    tabPatient: document.getElementById('tabPatient'),
-    tabProvider: document.getElementById('tabProvider'),
-    tabStaff: document.getElementById('tabStaff'),
-
-    // Demo Buttons
-    demoPatientBtn: document.getElementById('demoPatientBtn'),
-    demoProviderBtn: document.getElementById('demoProviderBtn'),
-    demoStaffBtn: document.getElementById('demoStaffBtn'),
+    // Demo Autofill Helper
+    autofillDemoBtn: document.getElementById('autofillDemoBtn'),
 
     // Login Form & Inputs
     loginForm: document.getElementById('loginForm'),
@@ -190,60 +160,16 @@
   });
 
   /* ==========================================================================
-     ROLE SWITCHER
+     DEMO AUTOFILL HELPER
      ========================================================================== */
-  function switchRole(role) {
-    state.currentRole = role;
-
-    // Update active tab buttons
-    [elements.tabPatient, elements.tabProvider, elements.tabStaff].forEach(tab => {
-      if (tab) {
-        const isMatch = tab.dataset.role === role;
-        tab.classList.toggle('active', isMatch);
-        tab.setAttribute('aria-selected', isMatch ? 'true' : 'false');
-      }
-    });
-
-    hideAlert();
-    clearValidationErrors();
-
-    // Adapt fields to role
-    if (role === 'patient') {
-      elements.identifierLabel.innerHTML = 'Patient Email or Medical Record # (MRN) <span class="required-star">*</span>';
-      elements.primaryIdentifier.placeholder = 'e.g. sarah.jenkins@example.com or MRN-84920';
-      elements.primaryIdentifier.autocomplete = 'username';
-      elements.patientDobGroup.style.display = 'block';
-      elements.patientDob.required = true;
-    } else if (role === 'provider') {
-      elements.identifierLabel.innerHTML = 'Provider NPI Number or Clinic Email <span class="required-star">*</span>';
-      elements.primaryIdentifier.placeholder = 'e.g. 1948201948 or dr.miller@metrohealth.org';
-      elements.primaryIdentifier.autocomplete = 'username';
-      elements.patientDobGroup.style.display = 'none';
-      elements.patientDob.required = false;
-    } else if (role === 'staff') {
-      elements.identifierLabel.innerHTML = 'US24 Corporate Account Email (@us24solutions.com) <span class="required-star">*</span>';
-      elements.primaryIdentifier.placeholder = 'e.g. billing.agent@us24solutions.com';
-      elements.primaryIdentifier.autocomplete = 'username';
-      elements.patientDobGroup.style.display = 'none';
-      elements.patientDob.required = false;
+  function fillDemoPatient() {
+    if (elements.primaryIdentifier) elements.primaryIdentifier.value = demoPatient.identifier;
+    if (elements.patientDob) elements.patientDob.value = demoPatient.dob;
+    if (elements.portalPassword) {
+      elements.portalPassword.value = demoPatient.password;
+      updatePasswordStrength(demoPatient.password);
     }
-  }
-
-  /* ==========================================================================
-     DEMO AUTOFILL
-     ========================================================================== */
-  function fillDemoProfile(roleKey) {
-    switchRole(roleKey);
-    const profile = demoProfiles[roleKey];
-    if (!profile) return;
-
-    elements.primaryIdentifier.value = profile.identifier;
-    if (roleKey === 'patient' && elements.patientDob) {
-      elements.patientDob.value = profile.dob;
-    }
-    elements.portalPassword.value = profile.password;
-    updatePasswordStrength(profile.password);
-    showAlert('success', `Loaded ${profile.name} credentials. Click "Authenticate & View Statements" to test.`);
+    showAlert('success', `Loaded demo credentials for ${demoPatient.name} (MRN: ${demoPatient.mrn}). Click "Authenticate & View Statements" to test.`);
   }
 
   /* ==========================================================================
@@ -325,8 +251,8 @@
       isValid = false;
     }
 
-    // Validate DOB if Patient
-    if (state.currentRole === 'patient') {
+    // Validate DOB
+    if (elements.patientDob) {
       const dobVal = elements.patientDob.value;
       if (!dobVal) {
         elements.patientDob.closest('.form-group').classList.add('has-error');
@@ -363,20 +289,19 @@
       elements.submitLoginBtn.classList.remove('loading');
       elements.submitLoginBtn.disabled = false;
 
-      // Set active user from profile or input
-      const profile = demoProfiles[state.currentRole];
+      // Set active user
+      const identifierInput = elements.primaryIdentifier.value.trim();
       state.activeUser = {
-        name: profile ? profile.name : elements.primaryIdentifier.value.trim(),
-        identifier: elements.primaryIdentifier.value.trim(),
-        role: state.currentRole,
-        balance: profile ? profile.balance : '$345.00',
-        totalBilled: profile ? profile.totalBilled : '$1,450.00',
-        insurancePaid: profile ? profile.insurancePaid : '-$1,105.00',
+        name: identifierInput.toLowerCase().includes('sarah') ? demoPatient.name : (identifierInput.split('@')[0] || 'Patient User'),
+        identifier: identifierInput,
+        balance: demoPatient.balance,
+        totalBilled: demoPatient.totalBilled,
+        insurancePaid: demoPatient.insurancePaid,
       };
 
       // Open 2FA Verification Modal (HIPAA requirement)
       openOtpModal();
-    }, 700);
+    }, 600);
   }
 
   function openOtpModal() {
@@ -461,15 +386,10 @@
       elements.themeToggleBtn.addEventListener('click', toggleTheme);
     }
 
-    // Role tabs
-    if (elements.tabPatient) elements.tabPatient.addEventListener('click', () => switchRole('patient'));
-    if (elements.tabProvider) elements.tabProvider.addEventListener('click', () => switchRole('provider'));
-    if (elements.tabStaff) elements.tabStaff.addEventListener('click', () => switchRole('staff'));
-
-    // Demo presets
-    if (elements.demoPatientBtn) elements.demoPatientBtn.addEventListener('click', () => fillDemoProfile('patient'));
-    if (elements.demoProviderBtn) elements.demoProviderBtn.addEventListener('click', () => fillDemoProfile('provider'));
-    if (elements.demoStaffBtn) elements.demoStaffBtn.addEventListener('click', () => fillDemoProfile('staff'));
+    // Demo preset button
+    if (elements.autofillDemoBtn) {
+      elements.autofillDemoBtn.addEventListener('click', fillDemoPatient);
+    }
 
     // Password visibility & meter
     if (elements.togglePasswordBtn) {
@@ -509,14 +429,14 @@
     // SSO Buttons
     if (elements.ssoHealthIdBtn) {
       elements.ssoHealthIdBtn.addEventListener('click', () => {
-        fillDemoProfile('patient');
+        fillDemoPatient();
         showAlert('success', 'Health ID Authenticated. Click "Authenticate" to enter statement.');
       });
     }
     if (elements.ssoGoogleBtn) {
       elements.ssoGoogleBtn.addEventListener('click', () => {
-        fillDemoProfile('staff');
-        showAlert('success', 'Google Workspace SSO verified for US24 domain.');
+        fillDemoPatient();
+        showAlert('success', 'Google Workspace verified. Click "Authenticate" to enter statement.');
       });
     }
 
@@ -595,7 +515,6 @@
     applyTheme(state.theme);
     startSessionTimer();
     setupEventListeners();
-    switchRole('patient');
   }
 
   if (document.readyState === 'loading') {
