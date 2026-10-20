@@ -100,11 +100,10 @@
     welcomeStatusText: document.getElementById('welcomeStatusText'),
     proceedToHomeBtn: document.getElementById('proceedToHomeBtn'),
 
-    // Homepage Elements: Top Corner User ID & Clinic
+    // Homepage Elements: Top Corner User ID, Clinic & Logo
     topCornerUserId: document.getElementById('topCornerUserId'),
-    topCornerClinicName: document.getElementById('topCornerClinicName'),
-    homeSignoutBtn: document.getElementById('homeSignoutBtn'),
-    homeGreetingName: document.getElementById('homeGreetingName'),
+    clinicSelect: document.getElementById('clinicSelect'),
+    homeCompanyLogo: document.getElementById('homeCompanyLogo'),
 
     // Middle of Homepage: 3 Operation Cards
     cardArReport: document.getElementById('cardArReport'),
@@ -233,12 +232,20 @@
     if (elements.welcomeView) elements.welcomeView.style.display = 'none';
     if (elements.homeView) elements.homeView.style.display = 'none';
 
+    const hipaaBanner = document.querySelector('.hipaa-top-banner');
+
     if (viewName === 'login') {
       if (elements.loginView) elements.loginView.style.display = 'block';
+      document.body.classList.remove('page-home');
+      if (hipaaBanner) hipaaBanner.style.display = 'block';
     } else if (viewName === 'welcome') {
       if (elements.welcomeView) elements.welcomeView.style.display = 'flex';
+      document.body.classList.remove('page-home');
+      if (hipaaBanner) hipaaBanner.style.display = 'block';
     } else if (viewName === 'home') {
-      if (elements.homeView) elements.homeView.style.display = 'block';
+      if (elements.homeView) elements.homeView.style.display = 'flex';
+      document.body.classList.add('page-home');
+      if (hipaaBanner) hipaaBanner.style.display = 'none';
     }
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -261,9 +268,7 @@
     if (elements.welcomePatientDetails) {
       elements.welcomePatientDetails.textContent = `MRN: ${user.mrn || 'US-84920'} • Statement ${user.statementNumber || '#US-2026-98124'}`;
     }
-    if (elements.homeGreetingName) elements.homeGreetingName.textContent = user.name;
     if (elements.topCornerUserId) elements.topCornerUserId.textContent = user.userId || user.mrn || 'US24-84920';
-    if (elements.topCornerClinicName) elements.topCornerClinicName.textContent = user.clinic || 'Metro Health Clinic';
     if (elements.dashPatientName) elements.dashPatientName.textContent = user.name;
     if (elements.hubPatientBalance) elements.hubPatientBalance.textContent = user.balance || '$345.00';
     if (elements.hubInsurancePaid) elements.hubInsurancePaid.textContent = user.insurancePaid || '-$1,105.00';
@@ -308,8 +313,12 @@
     }
     const user = state.activeUser || demoPatient;
     if (elements.topCornerUserId) elements.topCornerUserId.textContent = user.userId || user.mrn || 'US24-84920';
-    if (elements.topCornerClinicName) elements.topCornerClinicName.textContent = user.clinic || 'Metro Health Clinic';
-    if (elements.homeGreetingName) elements.homeGreetingName.textContent = user.name;
+    if (elements.clinicSelect && user.clinic) {
+      const options = Array.from(elements.clinicSelect.options).map(o => o.value);
+      if (options.includes(user.clinic)) {
+        elements.clinicSelect.value = user.clinic;
+      }
+    }
 
     showView('home');
     startSessionTimer(); // Refresh active session timer on homepage entry
@@ -685,18 +694,19 @@
     }
 
     // ========================================================================
-    // HOMEPAGE 3 MIDDLE CARDS INTERACTION
+    // HOMEPAGE 3 MIDDLE CARDS INTERACTION (ONLY THREE CARDS WITH PURE TITLES)
     // ========================================================================
     // Card 1: AR Report
     if (elements.cardArReport) {
-      elements.cardArReport.addEventListener('click', () => {
+      const openAr = () => {
         if (elements.arReportModalBackdrop) elements.arReportModalBackdrop.style.display = 'flex';
-      });
-    }
-    if (elements.openArReportBtn) {
-      elements.openArReportBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        if (elements.arReportModalBackdrop) elements.arReportModalBackdrop.style.display = 'flex';
+      };
+      elements.cardArReport.addEventListener('click', openAr);
+      elements.cardArReport.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openAr();
+        }
       });
     }
     if (elements.closeArBtn) {
@@ -715,14 +725,15 @@
 
     // Card 2: Clinic Collection
     if (elements.cardClinicCollection) {
-      elements.cardClinicCollection.addEventListener('click', () => {
+      const openCollection = () => {
         if (elements.clinicCollectionModalBackdrop) elements.clinicCollectionModalBackdrop.style.display = 'flex';
-      });
-    }
-    if (elements.openClinicCollectionBtn) {
-      elements.openClinicCollectionBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        if (elements.clinicCollectionModalBackdrop) elements.clinicCollectionModalBackdrop.style.display = 'flex';
+      };
+      elements.cardClinicCollection.addEventListener('click', openCollection);
+      elements.cardClinicCollection.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openCollection();
+        }
       });
     }
     if (elements.closeCollectionBtn) {
@@ -741,10 +752,26 @@
 
     // Card 3: Patient Statement
     if (elements.cardPatientStatement) {
-      elements.cardPatientStatement.addEventListener('click', scrollToPatientStatements);
+      const openStatement = () => {
+        openDashboardModal();
+      };
+      elements.cardPatientStatement.addEventListener('click', openStatement);
+      elements.cardPatientStatement.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openStatement();
+        }
+      });
     }
-    if (elements.openPatientStatementBtn) {
-      elements.openPatientStatementBtn.addEventListener('click', scrollToPatientStatements);
+
+    // Clinic Selector Change Event (Namaste, Arra, Icure, HariKrishna, Meyerland)
+    if (elements.clinicSelect) {
+      elements.clinicSelect.addEventListener('change', (e) => {
+        const selectedClinic = e.target.value;
+        if (state.activeUser) {
+          state.activeUser.clinic = selectedClinic;
+        }
+      });
     }
 
     // Homepage: Payment Buttons

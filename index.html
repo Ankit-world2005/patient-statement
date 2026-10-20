@@ -381,417 +381,53 @@
        PATIENT STATEMENT HOMEPAGE
        ========================================================================== -->
   <section id="homeView" class="view-panel home-portal-screen" style="display: none;">
-    <!-- Home Navigation Header -->
-    <header class="home-nav-header">
-      <div class="home-nav-inner">
-        <div class="home-nav-brand">
-          <img src="assets/us24-logo.png" alt="US24 Solutions" class="home-brand-logo">
-          <span class="home-brand-separator"></span>
-          <span class="home-brand-title">Patient Statement Portal</span>
+    <!-- Top Bar: Top Left (UserId and Clinic name under it) and Top Right (Only Company Logo) -->
+    <header class="hub-minimal-topbar">
+      <div class="hub-top-left">
+        <div class="hub-user-id-group">
+          <span class="hub-meta-label">UserId</span>
+          <span class="hub-user-id-val" id="topCornerUserId">US24-84920</span>
         </div>
-
-        <nav class="home-nav-menu" aria-label="Portal Navigation">
-          <a href="#statements" class="home-nav-link active">My Statements</a>
-          <a href="#paymentHistory" class="home-nav-link" id="navPaymentHistoryBtn">Payment History</a>
-          <a href="#insurance" class="home-nav-link" id="navInsuranceBtn">Insurance Claims</a>
-          <a href="#support" class="home-nav-link" id="navSupportBtn">Help &amp; Support</a>
-        </nav>
-
-        <div class="home-nav-actions">
-          <div class="corner-profile-group">
-            <div class="top-corner-pill pill-userid" title="Active Authenticated User ID">
-              <span class="online-indicator"></span>
-              <div class="pill-text-col">
-                <span class="pill-meta-label">User ID</span>
-                <strong class="pill-meta-value" id="topCornerUserId">US24-84920</strong>
-              </div>
-            </div>
-
-            <div class="top-corner-pill pill-clinic" title="Registered Clinic Facility">
-              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" class="clinic-icon">
-                <path d="M3 21h18M3 7v14M21 7v14M6 7V3h12v4M9 11h6M9 15h6M12 9v8"/>
-              </svg>
-              <div class="pill-text-col">
-                <span class="pill-meta-label">Clinic</span>
-                <strong class="pill-meta-value" id="topCornerClinicName">Metro Health Clinic</strong>
-              </div>
-            </div>
+        <div class="hub-clinic-group">
+          <span class="hub-meta-label">Clinic</span>
+          <div class="clinic-dropdown-wrap">
+            <select id="clinicSelect" class="clinic-select" aria-label="Select Clinic Facility">
+              <option value="Namaste" selected>Namaste</option>
+              <option value="Arra">Arra</option>
+              <option value="Icure">Icure</option>
+              <option value="HariKrishna">HariKrishna</option>
+              <option value="Meyerland">Meyerland</option>
+            </select>
           </div>
-
-          <button type="button" class="btn-signout" id="homeSignoutBtn" title="Lock session and sign out">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-              <polyline points="16 17 21 12 16 7"/>
-              <line x1="21" y1="12" x2="9" y2="12"/>
-            </svg>
-            <span>Sign Out</span>
-          </button>
         </div>
+      </div>
+
+      <div class="hub-top-right">
+        <a href="https://us24solutions.com" target="_blank" rel="noopener noreferrer" class="company-logo-link" title="US24 Solutions Official Website">
+          <img src="assets/us24-logo.png" alt="US24 Solutions Logo" class="hub-company-logo" id="homeCompanyLogo">
+        </a>
       </div>
     </header>
 
-    <!-- Homepage Main Content -->
-    <main class="home-main-content">
-      <div class="home-container">
-        <!-- Patient Banner Greeting -->
-        <div class="home-greeting-banner">
-          <div class="greeting-text-group">
-            <div class="greeting-tag">
-              <span class="pulse-dot"></span>
-              <span>Account Status: Active &amp; Verified</span>
-            </div>
-            <h1 class="greeting-title">Hello, <span id="homeGreetingName">Sarah Jenkins</span></h1>
-            <p class="greeting-subtitle">Here is your healthcare billing summary, processed statement records, and insurance adjustments managed by US24 Solutions.</p>
-          </div>
-          <div class="greeting-action-group">
-            <button type="button" class="btn-primary-glow" id="homePayStatementBtn">
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
-                <line x1="1" y1="10" x2="23" y2="10"/>
-              </svg>
-              <span>Pay Outstanding Balance ($345.00)</span>
-            </button>
-            <button type="button" class="btn-secondary-white" id="homeDownloadPdfBtn">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                <polyline points="7 10 12 15 17 10"/>
-                <line x1="12" y1="15" x2="12" y2="3"/>
-              </svg>
-              <span>Download PDF Statement</span>
-            </button>
-          </div>
+    <!-- Center of the page: ONLY the three cards and these cards mention ONLY their titles and nothing else -->
+    <main class="hub-three-cards-section" role="main">
+      <div class="hub-three-cards-grid">
+        <!-- Card 1: AR Report -->
+        <div class="minimal-hub-card card-ar" id="cardArReport" role="button" tabindex="0" title="Open AR Report">
+          <h2 class="card-pure-title">AR Report</h2>
         </div>
 
-        <!-- ==================================================================
-             MIDDLE OF THE HOMEPAGE: 3 PRIMARY OPERATION CARDS
-             1. AR Report
-             2. Clinic Collection
-             3. Patient Statement
-             ================================================================== -->
-        <section class="hub-cards-section" id="hubCardsSection" aria-label="Portal Services & Operations">
-          <div class="hub-header-center">
-            <div class="hub-pill">
-              <span class="hub-pill-dot"></span>
-              <span>US24 Operations Hub</span>
-            </div>
-            <h2 class="hub-title">Revenue Cycle &amp; Statement Operations</h2>
-            <p class="hub-subtitle">Select an operational module to review accounts receivable metrics, clinic collection yields, or view detailed patient statements.</p>
-          </div>
-
-          <div class="middle-three-cards-grid">
-            <!-- Card 1: AR Report -->
-            <div class="hub-module-card card-ar" id="cardArReport">
-              <div class="card-glow-bar glow-blue"></div>
-              <div class="module-card-header">
-                <div class="module-badge-icon badge-ar">
-                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="18" y1="20" x2="18" y2="10"/>
-                    <line x1="12" y1="20" x2="12" y2="4"/>
-                    <line x1="6" y1="20" x2="6" y2="14"/>
-                  </svg>
-                </div>
-                <span class="module-status-chip chip-blue">30/60/90/120d Aging</span>
-              </div>
-              <div class="module-card-body">
-                <div class="module-num-tag">01. FINANCIAL MODULE</div>
-                <h3 class="module-title">AR Report</h3>
-                <p class="module-desc">Insurance claims aging buckets, denial rates, payer follow-up, and collection efficiency metrics.</p>
-                
-                <div class="module-metrics-mini">
-                  <div class="mini-metric">
-                    <span class="mini-label">Total Outstanding AR</span>
-                    <strong class="mini-value text-blue">$348,250.00</strong>
-                  </div>
-                  <div class="mini-metric">
-                    <span class="mini-label">Clean Claims Rate</span>
-                    <strong class="mini-value text-green">99.2%</strong>
-                  </div>
-                </div>
-
-                <div class="aging-mini-bar" title="AR Aging: 0-30d (62%), 31-60d (18%), 61-90d (12%), 90+d (8%)">
-                  <div class="aging-seg seg-30" style="width: 62%;"></div>
-                  <div class="aging-seg seg-60" style="width: 18%;"></div>
-                  <div class="aging-seg seg-90" style="width: 12%;"></div>
-                  <div class="aging-seg seg-120" style="width: 8%;"></div>
-                </div>
-                <div class="aging-legend">
-                  <span><i class="dot-30"></i> 0-30d ($214.8k)</span>
-                  <span><i class="dot-60"></i> 31-60d ($62.6k)</span>
-                  <span><i class="dot-90"></i> 61-90d ($41.8k)</span>
-                  <span><i class="dot-120"></i> 90+d ($29.0k)</span>
-                </div>
-              </div>
-              <div class="module-card-footer">
-                <button type="button" class="btn-card-action btn-ar-action" id="openArReportBtn">
-                  <span>View AR Report</span>
-                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="9 18 15 12 9 6"/>
-                  </svg>
-                </button>
-              </div>
-            </div>
-
-            <!-- Card 2: Clinic Collection -->
-            <div class="hub-module-card card-collection" id="cardClinicCollection">
-              <div class="card-glow-bar glow-teal"></div>
-              <div class="module-card-header">
-                <div class="module-badge-icon badge-collection">
-                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-                  </svg>
-                </div>
-                <span class="module-status-chip chip-green">Reconciled MTD</span>
-              </div>
-              <div class="module-card-body">
-                <div class="module-num-tag">02. REVENUE CYCLE</div>
-                <h3 class="module-title">Clinic Collection</h3>
-                <p class="module-desc">Real-time clinic collection yields, daily electronic funds transfers (EFT), patient co-pays, and bank deposit batches.</p>
-                
-                <div class="module-metrics-mini">
-                  <div class="mini-metric">
-                    <span class="mini-label">Total Collected (MTD)</span>
-                    <strong class="mini-value text-green">$128,450.00</strong>
-                  </div>
-                  <div class="mini-metric">
-                    <span class="mini-label">Collection Rate</span>
-                    <strong class="mini-value text-blue">94.8%</strong>
-                  </div>
-                </div>
-
-                <div class="collection-breakdown-tags">
-                  <span class="collect-tag">Insurance EFT: $96.2k</span>
-                  <span class="collect-tag">Patient Cards: $24.8k</span>
-                  <span class="collect-tag">ACH/Checks: $7.45k</span>
-                </div>
-              </div>
-              <div class="module-card-footer">
-                <button type="button" class="btn-card-action btn-collection-action" id="openClinicCollectionBtn">
-                  <span>View Clinic Collection</span>
-                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="9 18 15 12 9 6"/>
-                  </svg>
-                </button>
-              </div>
-            </div>
-
-            <!-- Card 3: Patient Statement -->
-            <div class="hub-module-card card-statement highlight-statement" id="cardPatientStatement">
-              <div class="card-glow-bar glow-orange"></div>
-              <div class="module-card-header">
-                <div class="module-badge-icon badge-statement">
-                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                    <polyline points="14 2 14 8 20 8"/>
-                    <line x1="16" y1="13" x2="8" y2="13"/>
-                    <line x1="16" y1="17" x2="8" y2="17"/>
-                    <polyline points="10 9 9 9 8 9"/>
-                  </svg>
-                </div>
-                <span class="module-status-chip chip-orange">Active Billing</span>
-              </div>
-              <div class="module-card-body">
-                <div class="module-num-tag">03. PATIENT STATEMENTS</div>
-                <h3 class="module-title">Patient Statement</h3>
-                <p class="module-desc">Itemized patient statements, clinical CPT breakdown, insurance adjustments, instant HIPAA payment, and PDF records.</p>
-                
-                <div class="module-metrics-mini">
-                  <div class="mini-metric">
-                    <span class="mini-label">Patient Due Balance</span>
-                    <strong class="mini-value text-orange" id="hubPatientBalance">$345.00</strong>
-                  </div>
-                  <div class="mini-metric">
-                    <span class="mini-label">Insurance Paid</span>
-                    <strong class="mini-value text-green" id="hubInsurancePaid">-$1,105.00</strong>
-                  </div>
-                </div>
-
-                <div class="statement-callout-box">
-                  <span class="stmt-badge">Statement #US-2026-98124</span>
-                  <span class="stmt-due">Payment Due: Nov 15, 2026</span>
-                </div>
-              </div>
-              <div class="module-card-footer">
-                <button type="button" class="btn-card-action btn-statement-action" id="openPatientStatementBtn">
-                  <span>View Patient Statement</span>
-                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="9 18 15 12 9 6"/>
-                  </svg>
-                </button>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- Patient Statement Details & Claims Anchor -->
-        <div id="patientStatementsSection" class="patient-statement-section-wrap">
-        <!-- 4 Financial Summary KPI Cards -->
-        <div class="home-kpi-grid">
-          <div class="kpi-card highlight-orange">
-            <div class="kpi-card-header">
-              <span class="kpi-label">Current Balance Due</span>
-              <span class="kpi-badge badge-due">Due Nov 15, 2026</span>
-            </div>
-            <div class="kpi-value" id="homeKpiBalance">$345.00</div>
-            <div class="kpi-footer">
-              <span class="text-alert">Statement #US-2026-98124</span>
-              <a href="#viewStatement" class="kpi-link" id="kpiViewStmtLink">View Details &rarr;</a>
-            </div>
-          </div>
-
-          <div class="kpi-card">
-            <div class="kpi-card-header">
-              <span class="kpi-label">Insurance Covered</span>
-              <span class="kpi-badge badge-green">76.2% In-Network</span>
-            </div>
-            <div class="kpi-value text-green" id="homeKpiInsurance">-$1,105.00</div>
-            <div class="kpi-footer">
-              <span>BlueCross BlueShield PPO</span>
-            </div>
-          </div>
-
-          <div class="kpi-card">
-            <div class="kpi-card-header">
-              <span class="kpi-label">Total Charges Billed</span>
-              <span class="kpi-badge">3 Line Items</span>
-            </div>
-            <div class="kpi-value" id="homeKpiTotalBilled">$1,450.00</div>
-            <div class="kpi-footer">
-              <span>Metro Health Clinical Center</span>
-            </div>
-          </div>
-
-          <div class="kpi-card">
-            <div class="kpi-card-header">
-              <span class="kpi-label">Deductible Met</span>
-              <span class="kpi-badge badge-blue">80% Met</span>
-            </div>
-            <div class="kpi-value text-blue">$1,200.00</div>
-            <div class="kpi-footer">
-              <span>$300.00 Remaining to max out</span>
-            </div>
-          </div>
+        <!-- Card 2: Clinic Collection -->
+        <div class="minimal-hub-card card-collection" id="cardClinicCollection" role="button" tabindex="0" title="Open Clinic Collection">
+          <h2 class="card-pure-title">Clinic Collection</h2>
         </div>
 
-        <!-- Main Statements Table Section -->
-        <div class="home-section-card">
-          <div class="section-card-header">
-            <div>
-              <h2 class="section-card-title">Patient Statements &amp; Medical Invoices</h2>
-              <p class="section-card-subtitle">Official statement records and clinical item breakdowns managed under HIPAA security rules.</p>
-            </div>
-            <div class="table-search-wrap">
-              <input type="text" class="table-search-input" id="statementSearchInput" placeholder="Filter statements or CPT codes...">
-            </div>
-          </div>
-
-          <div class="table-responsive">
-            <table class="home-statements-table">
-              <thead>
-                <tr>
-                  <th>Statement #</th>
-                  <th>Service Date</th>
-                  <th>Provider / Facility</th>
-                  <th>Total Billed</th>
-                  <th>Insurance Paid</th>
-                  <th>Patient Responsibility</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr class="row-highlight">
-                  <td><strong>#US-2026-98124</strong></td>
-                  <td>Oct 12, 2026</td>
-                  <td>Dr. Robert Miller, MD (Metro Health)</td>
-                  <td>$1,450.00</td>
-                  <td class="text-green">-$1,105.00</td>
-                  <td><strong class="text-orange">$345.00</strong></td>
-                  <td><span class="status-pill status-unpaid">Payment Due</span></td>
-                  <td>
-                    <div class="action-btn-group">
-                      <button type="button" class="tbl-btn btn-view" id="tblViewStmtBtn">View Line Items</button>
-                      <button type="button" class="tbl-btn btn-pay-sm" id="tblPayStmtBtn">Pay Now</button>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td><strong>#US-2026-94102</strong></td>
-                  <td>Aug 04, 2026</td>
-                  <td>Metro Labs Clinical Diagnostic</td>
-                  <td>$420.00</td>
-                  <td class="text-green">-$380.00</td>
-                  <td><strong>$40.00</strong></td>
-                  <td><span class="status-pill status-paid">Paid in Full</span></td>
-                  <td>
-                    <div class="action-btn-group">
-                      <button type="button" class="tbl-btn btn-view" id="tblReceiptBtn1">Receipt</button>
-                      <button type="button" class="tbl-btn btn-pdf" id="tblPdfBtn1">PDF</button>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td><strong>#US-2026-89100</strong></td>
-                  <td>May 19, 2026</td>
-                  <td>Diagnostic Radiology Center</td>
-                  <td>$680.00</td>
-                  <td class="text-green">-$680.00</td>
-                  <td><strong>$0.00</strong></td>
-                  <td><span class="status-pill status-paid">Paid in Full</span></td>
-                  <td>
-                    <div class="action-btn-group">
-                      <button type="button" class="tbl-btn btn-view" id="tblReceiptBtn2">Receipt</button>
-                      <button type="button" class="tbl-btn btn-pdf" id="tblPdfBtn2">PDF</button>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+        <!-- Card 3: Patient Statement -->
+        <div class="minimal-hub-card card-statement" id="cardPatientStatement" role="button" tabindex="0" title="Open Patient Statement">
+          <h2 class="card-pure-title">Patient Statement</h2>
         </div>
-
-        <!-- Help & US24 Revenue Cycle Management Services Bar -->
-        <div class="home-support-bar">
-          <div class="support-bar-text">
-            <h4>Questions regarding your medical statement or insurance adjustments?</h4>
-            <p>US24 Solutions Revenue Cycle Management specialists are available 24/7 to assist with claim verification, appeals, and HSA/FSA financing.</p>
-          </div>
-          <div class="support-bar-actions">
-            <a href="tel:+1-309-364-6427" class="support-btn-call">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-              </svg>
-              <span>+1-309-364-6427</span>
-            </a>
-            <a href="mailto:contact@us24solutions.com" class="support-btn-email">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                <polyline points="22,6 12,13 2,6"/>
-              </svg>
-              <span>contact@us24solutions.com</span>
-            </a>
-          </div>
-        </div>
-        </div> <!-- End #patientStatementsSection -->
       </div>
     </main>
-
-    <!-- Homepage Footer -->
-    <footer class="home-portal-footer">
-      <div class="footer-inner-content">
-        <div class="footer-left-col">
-          <img src="assets/us24-logo.png" alt="US24 Solutions" class="footer-logo">
-          <p class="footer-desc">End-to-end Revenue Cycle Management (RCM), medical billing, provider credentialing, and healthcare technology solutions.</p>
-          <div class="footer-copyright">&copy; 2026 US24 Solutions. All rights reserved. HIPAA &amp; HITECH Compliant.</div>
-        </div>
-        <div class="footer-right-col">
-          <div class="footer-badges-list">
-            <span class="trust-badge-item">🔒 256-Bit TLS 1.3 Encryption</span>
-            <span class="trust-badge-item">🛡️ SOC 2 Type II Certified</span>
-            <span class="trust-badge-item">📋 45 CFR § 164.312 Compliant</span>
-          </div>
-        </div>
-      </div>
-    </footer>
   </section>
 
   <!-- Interactive Modal: Two-Factor Authentication (2FA / OTP Simulation) -->
