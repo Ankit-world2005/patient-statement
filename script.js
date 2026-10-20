@@ -1,13 +1,18 @@
 /**
  * US24 Solutions - Patient Statement Portal
- * HIPAA-Compliant Single Authentication Page & Patient Statement Showcase
+ * HIPAA-Compliant Single Authentication Page & Healthcare Operations Hub
  * 
  * Features:
  * - Single, unified Patient Statement login page (HIPAA NIST-800 compliant)
  * - Two-factor authentication (MFA/OTP) verification
  * - Dynamic Welcome Screen with official US24 Solutions logo & animated security progress
- * - Interactive Patient Statement Homepage dashboard with KPI metrics, statement list & search
- * - Detailed line-item breakdown modal (CPT codes, charges, insurance adjustments)
+ * - First Homepage with:
+ *     1. Top Corner: User ID + Clinic (Facility information)
+ *     2. Middle of the page: Three primary cards:
+ *         - Card 1: AR Report (Accounts Receivable Aging & Denial Analysis)
+ *         - Card 2: Clinic Collection (Reconciliation, Daily Deposits & EFT Yield)
+ *         - Card 3: Patient Statement (Invoices, CPT Breakdown & Balance Due)
+ * - Interactive Modals for AR Report, Clinic Collection, and Line-Item Statement Breakdown
  * - PCI-DSS Level 1 compliant payment flow simulation
  * - Statement PDF printing / saving
  * - HIPAA 15-minute inactivity session lock timer
@@ -35,6 +40,8 @@
     dob: '1988-06-14',
     password: 'US24@PatientStatement2026',
     name: 'Sarah Jenkins',
+    userId: 'US24-84920',
+    clinic: 'Metro Health Clinic',
     mrn: 'US-84920',
     statementNumber: '#US-2026-98124',
     balance: '$345.00',
@@ -93,11 +100,24 @@
     welcomeStatusText: document.getElementById('welcomeStatusText'),
     proceedToHomeBtn: document.getElementById('proceedToHomeBtn'),
 
-    // Homepage Elements
-    homeNav: document.querySelector('.home-nav-header'),
-    homeGreetingName: document.getElementById('homeGreetingName'),
-    homeUserPillName: document.getElementById('homeUserPillName'),
+    // Homepage Elements: Top Corner User ID & Clinic
+    topCornerUserId: document.getElementById('topCornerUserId'),
+    topCornerClinicName: document.getElementById('topCornerClinicName'),
     homeSignoutBtn: document.getElementById('homeSignoutBtn'),
+    homeGreetingName: document.getElementById('homeGreetingName'),
+
+    // Middle of Homepage: 3 Operation Cards
+    cardArReport: document.getElementById('cardArReport'),
+    openArReportBtn: document.getElementById('openArReportBtn'),
+    cardClinicCollection: document.getElementById('cardClinicCollection'),
+    openClinicCollectionBtn: document.getElementById('openClinicCollectionBtn'),
+    cardPatientStatement: document.getElementById('cardPatientStatement'),
+    openPatientStatementBtn: document.getElementById('openPatientStatementBtn'),
+    hubPatientBalance: document.getElementById('hubPatientBalance'),
+    hubInsurancePaid: document.getElementById('hubInsurancePaid'),
+    patientStatementsSection: document.getElementById('patientStatementsSection'),
+
+    // Homepage Patient Statement Detail Elements
     homePayStatementBtn: document.getElementById('homePayStatementBtn'),
     homeDownloadPdfBtn: document.getElementById('homeDownloadPdfBtn'),
     homeKpiBalance: document.getElementById('homeKpiBalance'),
@@ -124,6 +144,18 @@
     closeDashBtn: document.getElementById('closeDashBtn'),
     printStatementBtn: document.getElementById('printStatementBtn'),
     payBalanceBtn: document.getElementById('payBalanceBtn'),
+
+    // AR Report Modal
+    arReportModalBackdrop: document.getElementById('arReportModalBackdrop'),
+    closeArBtn: document.getElementById('closeArBtn'),
+    ackArBtn: document.getElementById('ackArBtn'),
+    printArBtn: document.getElementById('printArBtn'),
+
+    // Clinic Collection Modal
+    clinicCollectionModalBackdrop: document.getElementById('clinicCollectionModalBackdrop'),
+    closeCollectionBtn: document.getElementById('closeCollectionBtn'),
+    ackCollectionBtn: document.getElementById('ackCollectionBtn'),
+    printCollectionBtn: document.getElementById('printCollectionBtn'),
 
     // Forgot Password & Privacy Modals
     forgotPasswordBtn: document.getElementById('forgotPasswordBtn'),
@@ -230,8 +262,11 @@
       elements.welcomePatientDetails.textContent = `MRN: ${user.mrn || 'US-84920'} • Statement ${user.statementNumber || '#US-2026-98124'}`;
     }
     if (elements.homeGreetingName) elements.homeGreetingName.textContent = user.name;
-    if (elements.homeUserPillName) elements.homeUserPillName.textContent = user.name;
+    if (elements.topCornerUserId) elements.topCornerUserId.textContent = user.userId || user.mrn || 'US24-84920';
+    if (elements.topCornerClinicName) elements.topCornerClinicName.textContent = user.clinic || 'Metro Health Clinic';
     if (elements.dashPatientName) elements.dashPatientName.textContent = user.name;
+    if (elements.hubPatientBalance) elements.hubPatientBalance.textContent = user.balance || '$345.00';
+    if (elements.hubInsurancePaid) elements.hubInsurancePaid.textContent = user.insurancePaid || '-$1,105.00';
 
     // Reset progress bar to initial state
     if (elements.welcomeProgressFill) elements.welcomeProgressFill.style.width = '0%';
@@ -271,6 +306,11 @@
       clearTimeout(state.welcomeTimer);
       state.welcomeTimer = null;
     }
+    const user = state.activeUser || demoPatient;
+    if (elements.topCornerUserId) elements.topCornerUserId.textContent = user.userId || user.mrn || 'US24-84920';
+    if (elements.topCornerClinicName) elements.topCornerClinicName.textContent = user.clinic || 'Metro Health Clinic';
+    if (elements.homeGreetingName) elements.homeGreetingName.textContent = user.name;
+
     showView('home');
     startSessionTimer(); // Refresh active session timer on homepage entry
   }
@@ -415,6 +455,8 @@
       state.activeUser = {
         name: isDemo ? demoPatient.name : (identifierInput.split('@')[0] || 'Patient User'),
         identifier: identifierInput,
+        userId: isDemo ? demoPatient.userId : `US24-${Math.floor(10000 + Math.random() * 90000)}`,
+        clinic: demoPatient.clinic,
         mrn: isDemo ? demoPatient.mrn : 'US-84920',
         statementNumber: isDemo ? demoPatient.statementNumber : '#US-2026-98124',
         balance: demoPatient.balance,
@@ -486,6 +528,8 @@
   function closeAllModals() {
     if (elements.otpModalBackdrop) elements.otpModalBackdrop.style.display = 'none';
     if (elements.dashboardModalBackdrop) elements.dashboardModalBackdrop.style.display = 'none';
+    if (elements.arReportModalBackdrop) elements.arReportModalBackdrop.style.display = 'none';
+    if (elements.clinicCollectionModalBackdrop) elements.clinicCollectionModalBackdrop.style.display = 'none';
     if (elements.forgotModalBackdrop) elements.forgotModalBackdrop.style.display = 'none';
     if (elements.privacyModalBackdrop) elements.privacyModalBackdrop.style.display = 'none';
   }
@@ -510,6 +554,20 @@
         `Transaction ID: US24-TX-${Math.floor(100000 + Math.random() * 900000)}\n` +
         `An official HIPAA-compliant receipt has been emailed to ${user.identifier || demoPatient.identifier}.`
       );
+    }
+  }
+
+  /* ==========================================================================
+     SCROLL TO PATIENT STATEMENT SECTION
+     ========================================================================== */
+  function scrollToPatientStatements(e) {
+    if (e) e.stopPropagation();
+    if (elements.patientStatementsSection) {
+      elements.patientStatementsSection.scrollIntoView({ behavior: 'smooth' });
+      elements.patientStatementsSection.classList.remove('pulse-highlight');
+      // trigger reflow
+      void elements.patientStatementsSection.offsetWidth;
+      elements.patientStatementsSection.classList.add('pulse-highlight');
     }
   }
 
@@ -552,6 +610,8 @@
         state.activeUser = {
           name: demoPatient.name,
           identifier: demoPatient.identifier,
+          userId: demoPatient.userId,
+          clinic: demoPatient.clinic,
           mrn: demoPatient.mrn,
           statementNumber: demoPatient.statementNumber,
           balance: demoPatient.balance,
@@ -568,6 +628,8 @@
         state.activeUser = {
           name: demoPatient.name,
           identifier: demoPatient.identifier,
+          userId: demoPatient.userId,
+          clinic: demoPatient.clinic,
           mrn: demoPatient.mrn,
           statementNumber: demoPatient.statementNumber,
           balance: demoPatient.balance,
@@ -620,6 +682,69 @@
     // Homepage: Sign Out Button
     if (elements.homeSignoutBtn) {
       elements.homeSignoutBtn.addEventListener('click', handleSignOut);
+    }
+
+    // ========================================================================
+    // HOMEPAGE 3 MIDDLE CARDS INTERACTION
+    // ========================================================================
+    // Card 1: AR Report
+    if (elements.cardArReport) {
+      elements.cardArReport.addEventListener('click', () => {
+        if (elements.arReportModalBackdrop) elements.arReportModalBackdrop.style.display = 'flex';
+      });
+    }
+    if (elements.openArReportBtn) {
+      elements.openArReportBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (elements.arReportModalBackdrop) elements.arReportModalBackdrop.style.display = 'flex';
+      });
+    }
+    if (elements.closeArBtn) {
+      elements.closeArBtn.addEventListener('click', () => {
+        elements.arReportModalBackdrop.style.display = 'none';
+      });
+    }
+    if (elements.ackArBtn) {
+      elements.ackArBtn.addEventListener('click', () => {
+        elements.arReportModalBackdrop.style.display = 'none';
+      });
+    }
+    if (elements.printArBtn) {
+      elements.printArBtn.addEventListener('click', () => window.print());
+    }
+
+    // Card 2: Clinic Collection
+    if (elements.cardClinicCollection) {
+      elements.cardClinicCollection.addEventListener('click', () => {
+        if (elements.clinicCollectionModalBackdrop) elements.clinicCollectionModalBackdrop.style.display = 'flex';
+      });
+    }
+    if (elements.openClinicCollectionBtn) {
+      elements.openClinicCollectionBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (elements.clinicCollectionModalBackdrop) elements.clinicCollectionModalBackdrop.style.display = 'flex';
+      });
+    }
+    if (elements.closeCollectionBtn) {
+      elements.closeCollectionBtn.addEventListener('click', () => {
+        elements.clinicCollectionModalBackdrop.style.display = 'none';
+      });
+    }
+    if (elements.ackCollectionBtn) {
+      elements.ackCollectionBtn.addEventListener('click', () => {
+        elements.clinicCollectionModalBackdrop.style.display = 'none';
+      });
+    }
+    if (elements.printCollectionBtn) {
+      elements.printCollectionBtn.addEventListener('click', () => window.print());
+    }
+
+    // Card 3: Patient Statement
+    if (elements.cardPatientStatement) {
+      elements.cardPatientStatement.addEventListener('click', scrollToPatientStatements);
+    }
+    if (elements.openPatientStatementBtn) {
+      elements.openPatientStatementBtn.addEventListener('click', scrollToPatientStatements);
     }
 
     // Homepage: Payment Buttons

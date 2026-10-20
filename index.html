@@ -398,11 +398,26 @@
         </nav>
 
         <div class="home-nav-actions">
-          <div class="home-user-pill">
-            <span class="online-indicator"></span>
-            <span class="user-pill-name" id="homeUserPillName">Sarah Jenkins</span>
-            <span class="user-pill-mrn">(MRN #US-84920)</span>
+          <div class="corner-profile-group">
+            <div class="top-corner-pill pill-userid" title="Active Authenticated User ID">
+              <span class="online-indicator"></span>
+              <div class="pill-text-col">
+                <span class="pill-meta-label">User ID</span>
+                <strong class="pill-meta-value" id="topCornerUserId">US24-84920</strong>
+              </div>
+            </div>
+
+            <div class="top-corner-pill pill-clinic" title="Registered Clinic Facility">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" class="clinic-icon">
+                <path d="M3 21h18M3 7v14M21 7v14M6 7V3h12v4M9 11h6M9 15h6M12 9v8"/>
+              </svg>
+              <div class="pill-text-col">
+                <span class="pill-meta-label">Clinic</span>
+                <strong class="pill-meta-value" id="topCornerClinicName">Metro Health Clinic</strong>
+              </div>
+            </div>
           </div>
+
           <button type="button" class="btn-signout" id="homeSignoutBtn" title="Lock session and sign out">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
@@ -447,6 +462,168 @@
           </div>
         </div>
 
+        <!-- ==================================================================
+             MIDDLE OF THE HOMEPAGE: 3 PRIMARY OPERATION CARDS
+             1. AR Report
+             2. Clinic Collection
+             3. Patient Statement
+             ================================================================== -->
+        <section class="hub-cards-section" id="hubCardsSection" aria-label="Portal Services & Operations">
+          <div class="hub-header-center">
+            <div class="hub-pill">
+              <span class="hub-pill-dot"></span>
+              <span>US24 Operations Hub</span>
+            </div>
+            <h2 class="hub-title">Revenue Cycle &amp; Statement Operations</h2>
+            <p class="hub-subtitle">Select an operational module to review accounts receivable metrics, clinic collection yields, or view detailed patient statements.</p>
+          </div>
+
+          <div class="middle-three-cards-grid">
+            <!-- Card 1: AR Report -->
+            <div class="hub-module-card card-ar" id="cardArReport">
+              <div class="card-glow-bar glow-blue"></div>
+              <div class="module-card-header">
+                <div class="module-badge-icon badge-ar">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="20" x2="18" y2="10"/>
+                    <line x1="12" y1="20" x2="12" y2="4"/>
+                    <line x1="6" y1="20" x2="6" y2="14"/>
+                  </svg>
+                </div>
+                <span class="module-status-chip chip-blue">30/60/90/120d Aging</span>
+              </div>
+              <div class="module-card-body">
+                <div class="module-num-tag">01. FINANCIAL MODULE</div>
+                <h3 class="module-title">AR Report</h3>
+                <p class="module-desc">Insurance claims aging buckets, denial rates, payer follow-up, and collection efficiency metrics.</p>
+                
+                <div class="module-metrics-mini">
+                  <div class="mini-metric">
+                    <span class="mini-label">Total Outstanding AR</span>
+                    <strong class="mini-value text-blue">$348,250.00</strong>
+                  </div>
+                  <div class="mini-metric">
+                    <span class="mini-label">Clean Claims Rate</span>
+                    <strong class="mini-value text-green">99.2%</strong>
+                  </div>
+                </div>
+
+                <div class="aging-mini-bar" title="AR Aging: 0-30d (62%), 31-60d (18%), 61-90d (12%), 90+d (8%)">
+                  <div class="aging-seg seg-30" style="width: 62%;"></div>
+                  <div class="aging-seg seg-60" style="width: 18%;"></div>
+                  <div class="aging-seg seg-90" style="width: 12%;"></div>
+                  <div class="aging-seg seg-120" style="width: 8%;"></div>
+                </div>
+                <div class="aging-legend">
+                  <span><i class="dot-30"></i> 0-30d ($214.8k)</span>
+                  <span><i class="dot-60"></i> 31-60d ($62.6k)</span>
+                  <span><i class="dot-90"></i> 61-90d ($41.8k)</span>
+                  <span><i class="dot-120"></i> 90+d ($29.0k)</span>
+                </div>
+              </div>
+              <div class="module-card-footer">
+                <button type="button" class="btn-card-action btn-ar-action" id="openArReportBtn">
+                  <span>View AR Report</span>
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Card 2: Clinic Collection -->
+            <div class="hub-module-card card-collection" id="cardClinicCollection">
+              <div class="card-glow-bar glow-teal"></div>
+              <div class="module-card-header">
+                <div class="module-badge-icon badge-collection">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                  </svg>
+                </div>
+                <span class="module-status-chip chip-green">Reconciled MTD</span>
+              </div>
+              <div class="module-card-body">
+                <div class="module-num-tag">02. REVENUE CYCLE</div>
+                <h3 class="module-title">Clinic Collection</h3>
+                <p class="module-desc">Real-time clinic collection yields, daily electronic funds transfers (EFT), patient co-pays, and bank deposit batches.</p>
+                
+                <div class="module-metrics-mini">
+                  <div class="mini-metric">
+                    <span class="mini-label">Total Collected (MTD)</span>
+                    <strong class="mini-value text-green">$128,450.00</strong>
+                  </div>
+                  <div class="mini-metric">
+                    <span class="mini-label">Collection Rate</span>
+                    <strong class="mini-value text-blue">94.8%</strong>
+                  </div>
+                </div>
+
+                <div class="collection-breakdown-tags">
+                  <span class="collect-tag">Insurance EFT: $96.2k</span>
+                  <span class="collect-tag">Patient Cards: $24.8k</span>
+                  <span class="collect-tag">ACH/Checks: $7.45k</span>
+                </div>
+              </div>
+              <div class="module-card-footer">
+                <button type="button" class="btn-card-action btn-collection-action" id="openClinicCollectionBtn">
+                  <span>View Clinic Collection</span>
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Card 3: Patient Statement -->
+            <div class="hub-module-card card-statement highlight-statement" id="cardPatientStatement">
+              <div class="card-glow-bar glow-orange"></div>
+              <div class="module-card-header">
+                <div class="module-badge-icon badge-statement">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="16" y1="13" x2="8" y2="13"/>
+                    <line x1="16" y1="17" x2="8" y2="17"/>
+                    <polyline points="10 9 9 9 8 9"/>
+                  </svg>
+                </div>
+                <span class="module-status-chip chip-orange">Active Billing</span>
+              </div>
+              <div class="module-card-body">
+                <div class="module-num-tag">03. PATIENT STATEMENTS</div>
+                <h3 class="module-title">Patient Statement</h3>
+                <p class="module-desc">Itemized patient statements, clinical CPT breakdown, insurance adjustments, instant HIPAA payment, and PDF records.</p>
+                
+                <div class="module-metrics-mini">
+                  <div class="mini-metric">
+                    <span class="mini-label">Patient Due Balance</span>
+                    <strong class="mini-value text-orange" id="hubPatientBalance">$345.00</strong>
+                  </div>
+                  <div class="mini-metric">
+                    <span class="mini-label">Insurance Paid</span>
+                    <strong class="mini-value text-green" id="hubInsurancePaid">-$1,105.00</strong>
+                  </div>
+                </div>
+
+                <div class="statement-callout-box">
+                  <span class="stmt-badge">Statement #US-2026-98124</span>
+                  <span class="stmt-due">Payment Due: Nov 15, 2026</span>
+                </div>
+              </div>
+              <div class="module-card-footer">
+                <button type="button" class="btn-card-action btn-statement-action" id="openPatientStatementBtn">
+                  <span>View Patient Statement</span>
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Patient Statement Details & Claims Anchor -->
+        <div id="patientStatementsSection" class="patient-statement-section-wrap">
         <!-- 4 Financial Summary KPI Cards -->
         <div class="home-kpi-grid">
           <div class="kpi-card highlight-orange">
@@ -594,6 +771,7 @@
             </a>
           </div>
         </div>
+        </div> <!-- End #patientStatementsSection -->
       </div>
     </main>
 
@@ -859,6 +1037,269 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn-primary" id="ackPrivacyBtn">Acknowledge &amp; Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       INTERACTIVE MODAL: AR REPORT (ACCOUNTS RECEIVABLE AGING & DENIAL ANALYSIS)
+       ========================================================================== -->
+  <div class="modal-backdrop" id="arReportModalBackdrop" role="dialog" aria-modal="true" aria-labelledby="arModalTitle" style="display: none;">
+    <div class="modal-dialog modal-large">
+      <div class="modal-header">
+        <div class="modal-badge blue-bg">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="20" x2="18" y2="10"/>
+            <line x1="12" y1="20" x2="12" y2="4"/>
+            <line x1="6" y1="20" x2="6" y2="14"/>
+          </svg>
+        </div>
+        <div class="flex-grow">
+          <div class="dash-status-pill blue-pill">Accounts Receivable Aging • US24 RCM Gateway</div>
+          <h3 id="arModalTitle" class="modal-title">AR Aging &amp; Payer Analysis Report</h3>
+          <p class="modal-desc">Facility: <strong id="arFacilityName">Metro Health Clinic</strong> | Reporting Window: Current Year-to-Date Active</p>
+        </div>
+        <button type="button" class="close-card-btn" id="closeArBtn" aria-label="Close AR Report">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="modal-body modal-scroll">
+        <!-- AR Summary Cards -->
+        <div class="statement-summary-grid">
+          <div class="summary-card">
+            <div class="summary-label">Total Outstanding AR</div>
+            <div class="summary-value text-blue">$348,250.00</div>
+            <div class="summary-sub">Across 142 Active Claims</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-label">Average Days in AR (DAR)</div>
+            <div class="summary-value text-green">28.4 Days</div>
+            <div class="summary-sub">National Benchmark: &lt; 45 Days</div>
+          </div>
+          <div class="summary-card highlight-card">
+            <div class="summary-label">Clean Claims Pass Rate</div>
+            <div class="summary-value text-orange">99.2%</div>
+            <div class="summary-sub">First-Pass Adjudication</div>
+          </div>
+        </div>
+
+        <!-- Aging Bucket Table -->
+        <h4 style="margin: 24px 0 12px; font-family: var(--font-heading); color: var(--text-main); font-size: 1.125rem;">
+          Payer Accounts Receivable Aging Distribution
+        </h4>
+        <div class="table-responsive">
+          <table class="home-statements-table">
+            <thead>
+              <tr>
+                <th>Payer Organization</th>
+                <th>Claims</th>
+                <th>0–30 Days</th>
+                <th>31–60 Days</th>
+                <th>61–90 Days</th>
+                <th>90+ Days</th>
+                <th>Total AR</th>
+                <th>Adjudication</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Medicare Part B (CMS)</strong></td>
+                <td>48</td>
+                <td>$84,000.00</td>
+                <td>$22,000.00</td>
+                <td>$4,400.00</td>
+                <td>$2,000.00</td>
+                <td><strong>$112,400.00</strong></td>
+                <td><span class="status-pill status-paid">Adjudicated</span></td>
+              </tr>
+              <tr>
+                <td><strong>BlueCross BlueShield PPO</strong></td>
+                <td>42</td>
+                <td>$72,000.00</td>
+                <td>$18,000.00</td>
+                <td>$6,200.00</td>
+                <td>$2,400.00</td>
+                <td><strong>$98,600.00</strong></td>
+                <td><span class="status-pill status-paid">Current</span></td>
+              </tr>
+              <tr>
+                <td><strong>UnitedHealthcare</strong></td>
+                <td>26</td>
+                <td>$41,000.00</td>
+                <td>$15,000.00</td>
+                <td>$5,800.00</td>
+                <td>$2,500.00</td>
+                <td><strong>$64,300.00</strong></td>
+                <td><span class="status-pill status-paid">Current</span></td>
+              </tr>
+              <tr>
+                <td><strong>Aetna Healthcare</strong></td>
+                <td>16</td>
+                <td>$31,000.00</td>
+                <td>$8,200.00</td>
+                <td>$2,100.00</td>
+                <td>$850.00</td>
+                <td><strong>$42,150.00</strong></td>
+                <td><span class="status-pill status-paid">Current</span></td>
+              </tr>
+              <tr>
+                <td><strong>Patient Self-Pay</strong></td>
+                <td>10</td>
+                <td>$12,800.00</td>
+                <td>$7,400.00</td>
+                <td>$6,500.00</td>
+                <td>$4,100.00</td>
+                <td><strong class="text-orange">$30,800.00</strong></td>
+                <td><span class="status-pill status-unpaid">Statements Sent</span></td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="6" class="text-right"><strong>Grand Total Accounts Receivable:</strong></td>
+                <td colspan="2"><strong class="text-blue" style="font-size: 1.125rem;">$348,250.00</strong></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn-outline" id="printArBtn">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 6 2 18 2 18 9"/>
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+            <rect x="6" y="14" width="12" height="8"/>
+          </svg>
+          Print AR Report
+        </button>
+        <button type="button" class="btn-primary" id="ackArBtn">Done / Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       INTERACTIVE MODAL: CLINIC COLLECTION (DAILY DEPOSIT LOGS & EFT RECONCILIATION)
+       ========================================================================== -->
+  <div class="modal-backdrop" id="clinicCollectionModalBackdrop" role="dialog" aria-modal="true" aria-labelledby="colModalTitle" style="display: none;">
+    <div class="modal-dialog modal-large">
+      <div class="modal-header">
+        <div class="modal-badge green-bg">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+          </svg>
+        </div>
+        <div class="flex-grow">
+          <div class="dash-status-pill green-pill">Treasury &amp; Deposit Reconciliation • US24 RCM Gateway</div>
+          <h3 id="colModalTitle" class="modal-title">Clinic Collections &amp; Deposit Summary</h3>
+          <p class="modal-desc">Facility: <strong id="colFacilityName">Metro Health Clinic</strong> | Month-to-Date (MTD) Deposited Collections</p>
+        </div>
+        <button type="button" class="close-card-btn" id="closeCollectionBtn" aria-label="Close Collection Report">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="modal-body modal-scroll">
+        <!-- Collection summary cards -->
+        <div class="statement-summary-grid">
+          <div class="summary-card">
+            <div class="summary-label">Total Collected MTD</div>
+            <div class="summary-value text-green">$128,450.00</div>
+            <div class="summary-sub">Reconciled to Clinic Treasury</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-label">Insurance EFT / ERA</div>
+            <div class="summary-value text-blue">$96,200.00</div>
+            <div class="summary-sub">74.9% of Total Collections</div>
+          </div>
+          <div class="summary-card highlight-card">
+            <div class="summary-label">Patient Direct Collections</div>
+            <div class="summary-value text-orange">$32,250.00</div>
+            <div class="summary-sub">Card, Portal &amp; Point-of-Sale</div>
+          </div>
+        </div>
+
+        <!-- Collection Batches Table -->
+        <h4 style="margin: 24px 0 12px; font-family: var(--font-heading); color: var(--text-main); font-size: 1.125rem;">
+          Recent Settled Deposit Batches
+        </h4>
+        <div class="table-responsive">
+          <table class="home-statements-table">
+            <thead>
+              <tr>
+                <th>Batch ID</th>
+                <th>Deposit Date</th>
+                <th>Payment Channel</th>
+                <th>Gross Receipt</th>
+                <th>Fee / Adj</th>
+                <th>Net Deposited</th>
+                <th>Reconciliation Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>#BAT-2026-1019</strong></td>
+                <td>Oct 19, 2026</td>
+                <td>Insurance 835 EFT (Payer Clearinghouse)</td>
+                <td>$18,420.00</td>
+                <td>$0.00</td>
+                <td><strong class="text-green">$18,420.00</strong></td>
+                <td><span class="status-pill status-paid">Bank Settled</span></td>
+              </tr>
+              <tr>
+                <td><strong>#BAT-2026-1018</strong></td>
+                <td>Oct 18, 2026</td>
+                <td>Patient Credit/Debit Cards (PCI-DSS)</td>
+                <td>$4,780.00</td>
+                <td>-$130.00</td>
+                <td><strong class="text-green">$4,650.00</strong></td>
+                <td><span class="status-pill status-paid">Bank Settled</span></td>
+              </tr>
+              <tr>
+                <td><strong>#BAT-2026-1017</strong></td>
+                <td>Oct 17, 2026</td>
+                <td>Medicare Direct Treasury ACH</td>
+                <td>$22,890.00</td>
+                <td>$0.00</td>
+                <td><strong class="text-green">$22,890.00</strong></td>
+                <td><span class="status-pill status-paid">Bank Settled</span></td>
+              </tr>
+              <tr>
+                <td><strong>#BAT-2026-1016</strong></td>
+                <td>Oct 16, 2026</td>
+                <td>Commercial Payer Remittance</td>
+                <td>$15,340.00</td>
+                <td>$0.00</td>
+                <td><strong class="text-green">$15,340.00</strong></td>
+                <td><span class="status-pill status-paid">Bank Settled</span></td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="5" class="text-right"><strong>MTD Verified Reconciled Total:</strong></td>
+                <td colspan="2"><strong class="text-green" style="font-size: 1.125rem;">$128,450.00</strong></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn-outline" id="printCollectionBtn">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 6 2 18 2 18 9"/>
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+            <rect x="6" y="14" width="12" height="8"/>
+          </svg>
+          Print Collection Log
+        </button>
+        <button type="button" class="btn-primary" id="ackCollectionBtn">Done / Close</button>
       </div>
     </div>
   </div>

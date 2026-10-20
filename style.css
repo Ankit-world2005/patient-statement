@@ -1921,15 +1921,61 @@ body.theme-dark .home-nav-link.active {
   gap: 16px;
 }
 
-.home-user-pill {
+/* Top Corner User & Clinic Pills */
+.corner-profile-group {
   display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.top-corner-pill {
+  display: inline-flex;
   align-items: center;
   gap: 8px;
   background: var(--bg-page);
-  padding: 6px 14px;
+  padding: 5px 12px;
   border-radius: var(--radius-pill);
   border: 1px solid var(--bg-card-border);
+  transition: all var(--transition-fast);
+}
+
+.top-corner-pill:hover {
+  border-color: var(--us24-navy);
+  box-shadow: var(--shadow-sm);
+}
+
+.pill-userid {
+  border-left: 3px solid var(--us24-navy);
+}
+
+.pill-clinic {
+  border-left: 3px solid var(--us24-teal);
+}
+
+.clinic-icon {
+  color: var(--us24-teal);
+  flex-shrink: 0;
+}
+
+.pill-text-col {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.pill-meta-label {
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+.pill-meta-value {
+  font-family: var(--font-heading);
   font-size: 0.8125rem;
+  color: var(--text-main);
+  font-weight: 700;
 }
 
 .online-indicator {
@@ -1938,17 +1984,7 @@ body.theme-dark .home-nav-link.active {
   border-radius: 50%;
   background: var(--us24-teal);
   box-shadow: 0 0 6px var(--us24-teal);
-}
-
-.user-pill-name {
-  font-weight: 700;
-  color: var(--text-main);
-}
-
-.user-pill-mrn {
-  color: var(--text-light);
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
+  flex-shrink: 0;
 }
 
 .btn-signout {
@@ -2091,6 +2127,403 @@ body.theme-dark .home-nav-link.active {
 
 .btn-secondary-white:hover {
   background: rgba(255, 255, 255, 0.25);
+}
+
+/* ==========================================================================
+   MIDDLE OF THE HOMEPAGE: 3 PRIMARY OPERATION CARDS
+   1. AR Report
+   2. Clinic Collection
+   3. Patient Statement
+   ========================================================================== */
+.hub-cards-section {
+  margin-bottom: 40px;
+}
+
+.hub-header-center {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 30px;
+}
+
+.hub-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--badge-bg);
+  color: var(--us24-navy);
+  padding: 5px 14px;
+  border-radius: var(--radius-pill);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+}
+
+body.theme-dark .hub-pill {
+  color: var(--us24-tech-blue);
+}
+
+.hub-pill-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--us24-orange);
+}
+
+.hub-title {
+  font-family: var(--font-heading);
+  font-size: 1.875rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 6px;
+  line-height: 1.2;
+}
+
+.hub-subtitle {
+  font-size: 0.9375rem;
+  color: var(--text-muted);
+}
+
+.middle-three-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.hub-module-card {
+  background: var(--bg-card);
+  border: 1px solid var(--bg-card-border);
+  border-radius: var(--radius-lg);
+  padding: 26px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+}
+
+.hub-module-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(36, 57, 137, 0.35);
+}
+
+.hub-module-card.highlight-statement:hover {
+  border-color: rgba(254, 113, 33, 0.45);
+}
+
+.card-glow-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+}
+
+.glow-blue {
+  background: linear-gradient(90deg, var(--us24-navy) 0%, var(--us24-tech-blue) 100%);
+}
+
+.glow-teal {
+  background: linear-gradient(90deg, var(--us24-teal) 0%, #3dc194 100%);
+}
+
+.glow-orange {
+  background: linear-gradient(90deg, var(--us24-orange) 0%, #ff8e4d 100%);
+}
+
+.module-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.module-badge-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.badge-ar {
+  background: rgba(36, 57, 137, 0.1);
+  color: var(--us24-navy);
+}
+
+body.theme-dark .badge-ar {
+  background: rgba(115, 153, 230, 0.15);
+  color: var(--us24-tech-blue);
+}
+
+.badge-collection {
+  background: var(--us24-teal-soft);
+  color: var(--us24-teal-dark);
+}
+
+body.theme-dark .badge-collection {
+  color: var(--us24-teal);
+}
+
+.badge-statement {
+  background: var(--us24-orange-soft);
+  color: var(--us24-orange);
+}
+
+.module-status-chip {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+}
+
+.chip-blue {
+  background: rgba(115, 153, 230, 0.15);
+  color: var(--us24-navy);
+}
+
+body.theme-dark .chip-blue {
+  color: var(--us24-tech-blue);
+}
+
+.chip-green {
+  background: var(--us24-teal-soft);
+  color: var(--us24-teal-dark);
+}
+
+body.theme-dark .chip-green {
+  color: var(--us24-teal);
+}
+
+.chip-orange {
+  background: var(--us24-orange-soft);
+  color: var(--us24-orange);
+}
+
+.module-num-tag {
+  font-size: 0.6875rem;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--text-light);
+  margin-bottom: 4px;
+}
+
+.module-title {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 8px;
+}
+
+.module-desc {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-bottom: 18px;
+  min-height: 48px;
+}
+
+.module-metrics-mini {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  background: var(--bg-page);
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--bg-card-border);
+  margin-bottom: 16px;
+}
+
+.mini-metric {
+  display: flex;
+  flex-direction: column;
+}
+
+.mini-label {
+  font-size: 0.6875rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.mini-value {
+  font-family: var(--font-heading);
+  font-size: 1.125rem;
+  font-weight: 800;
+}
+
+/* Aging Mini Bar */
+.aging-mini-bar {
+  display: flex;
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.aging-seg.seg-30 { background: #2fa177; }
+.aging-seg.seg-60 { background: #7399e6; }
+.aging-seg.seg-90 { background: #fe7121; }
+.aging-seg.seg-120 { background: #e53e3e; }
+
+.aging-legend {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.6875rem;
+  color: var(--text-light);
+  font-family: var(--font-mono);
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.aging-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.aging-legend i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.aging-legend .dot-30 { background: #2fa177; }
+.aging-legend .dot-60 { background: #7399e6; }
+.aging-legend .dot-90 { background: #fe7121; }
+.aging-legend .dot-120 { background: #e53e3e; }
+
+/* Collection Tags */
+.collection-breakdown-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+
+.collect-tag {
+  background: var(--bg-page);
+  border: 1px solid var(--bg-card-border);
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+/* Statement Callout */
+.statement-callout-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--us24-orange-soft);
+  border: 1px solid rgba(254, 113, 33, 0.2);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  margin-bottom: 20px;
+}
+
+.stmt-badge {
+  font-weight: 700;
+  color: var(--us24-orange);
+}
+
+.stmt-due {
+  color: var(--text-muted);
+  font-size: 0.6875rem;
+}
+
+/* Card Action Buttons */
+.btn-card-action {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-heading);
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition: all var(--transition-fast);
+}
+
+.btn-ar-action {
+  background: var(--us24-navy);
+  color: #ffffff;
+}
+
+.btn-ar-action:hover {
+  background: var(--us24-navy-light);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-glow-blue);
+}
+
+.btn-collection-action {
+  background: var(--us24-teal-dark);
+  color: #ffffff;
+}
+
+.btn-collection-action:hover {
+  background: var(--us24-teal);
+  transform: translateY(-2px);
+}
+
+.btn-statement-action {
+  background: var(--us24-orange);
+  color: #ffffff;
+}
+
+.btn-statement-action:hover {
+  background: var(--us24-orange-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-glow-orange);
+}
+
+/* Patient Statement Section Wrap */
+.patient-statement-section-wrap {
+  scroll-margin-top: 80px;
+  transition: all 0.5s ease;
+}
+
+.patient-statement-section-wrap.pulse-highlight {
+  animation: highlight-pulse 1.6s ease-out;
+}
+
+@keyframes highlight-pulse {
+  0% { box-shadow: 0 0 0 4px var(--us24-orange); }
+  50% { box-shadow: 0 0 25px rgba(254, 113, 33, 0.4); }
+  100% { box-shadow: none; }
+}
+
+/* Modal Status Pill Variations */
+.dash-status-pill.blue-pill {
+  background: rgba(36, 57, 137, 0.1);
+  color: var(--us24-navy);
+}
+
+body.theme-dark .dash-status-pill.blue-pill {
+  color: var(--us24-tech-blue);
+}
+
+.dash-status-pill.green-pill {
+  background: var(--us24-teal-soft);
+  color: var(--us24-teal-dark);
+}
+
+body.theme-dark .dash-status-pill.green-pill {
+  color: var(--us24-teal);
 }
 
 /* Home KPI Grid */
@@ -2473,6 +2906,11 @@ body.theme-dark .footer-logo {
 }
 
 @media (max-width: 1080px) {
+  .middle-three-cards-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
   .home-kpi-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -2482,6 +2920,18 @@ body.theme-dark .footer-logo {
   .home-nav-inner {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .home-nav-actions {
+    width: 100%;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .corner-profile-group {
+    flex-wrap: wrap;
+    gap: 8px;
   }
 
   .home-greeting-banner {
