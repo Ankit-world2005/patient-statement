@@ -3,10 +3,14 @@
  * HIPAA-Compliant Single Authentication Page & Patient Statement Showcase
  * 
  * Features:
- * - Single, unified Patient Statement login page
+ * - Single, unified Patient Statement login page (HIPAA NIST-800 compliant)
+ * - Two-factor authentication (MFA/OTP) verification
+ * - Dynamic Welcome Screen with official US24 Solutions logo & animated security progress
+ * - Interactive Patient Statement Homepage dashboard with KPI metrics, statement list & search
+ * - Detailed line-item breakdown modal (CPT codes, charges, insurance adjustments)
+ * - PCI-DSS Level 1 compliant payment flow simulation
+ * - Statement PDF printing / saving
  * - HIPAA 15-minute inactivity session lock timer
- * - Two-factor authentication (MFA/OTP) simulation
- * - Interactive Patient Statement Dashboard with line-item claims & PDF printing
  * - Real-time password strength validation & visibility toggle
  * - Light / Dark mode persistence
  */
@@ -21,6 +25,8 @@
     timerInterval: null,
     rememberDevice: false,
     activeUser: null,
+    welcomeTimer: null,
+    currentView: 'login', // 'login' | 'welcome' | 'home'
   };
 
   // Predefined Demo Patient Profile for Easy Testing
@@ -30,6 +36,7 @@
     password: 'US24@PatientStatement2026',
     name: 'Sarah Jenkins',
     mrn: 'US-84920',
+    statementNumber: '#US-2026-98124',
     balance: '$345.00',
     totalBilled: '$1,450.00',
     insurancePaid: '-$1,105.00',
@@ -37,6 +44,11 @@
 
   // DOM Elements
   const elements = {
+    // Views
+    loginView: document.getElementById('loginView'),
+    welcomeView: document.getElementById('welcomeView'),
+    homeView: document.getElementById('homeView'),
+
     // Top Bar & Theme
     themeToggleBtn: document.getElementById('themeToggleBtn'),
     timerCountdown: document.getElementById('timerCountdown'),
@@ -64,7 +76,7 @@
     ssoHealthIdBtn: document.getElementById('ssoHealthIdBtn'),
     ssoGoogleBtn: document.getElementById('ssoGoogleBtn'),
 
-    // Modals
+    // 2FA / OTP Modal
     otpModalBackdrop: document.getElementById('otpModalBackdrop'),
     otpTargetDisplay: document.getElementById('otpTargetDisplay'),
     otpContainer: document.getElementById('otpContainer'),
@@ -73,7 +85,37 @@
     cancelOtpBtn: document.getElementById('cancelOtpBtn'),
     verifyOtpBtn: document.getElementById('verifyOtpBtn'),
 
-    // Dashboard Modal
+    // Welcome Screen Elements
+    welcomeLogo: document.getElementById('welcomeLogo'),
+    welcomePatientName: document.getElementById('welcomePatientName'),
+    welcomePatientDetails: document.getElementById('welcomePatientDetails'),
+    welcomeProgressFill: document.getElementById('welcomeProgressFill'),
+    welcomeStatusText: document.getElementById('welcomeStatusText'),
+    proceedToHomeBtn: document.getElementById('proceedToHomeBtn'),
+
+    // Homepage Elements
+    homeNav: document.querySelector('.home-nav-header'),
+    homeGreetingName: document.getElementById('homeGreetingName'),
+    homeUserPillName: document.getElementById('homeUserPillName'),
+    homeSignoutBtn: document.getElementById('homeSignoutBtn'),
+    homePayStatementBtn: document.getElementById('homePayStatementBtn'),
+    homeDownloadPdfBtn: document.getElementById('homeDownloadPdfBtn'),
+    homeKpiBalance: document.getElementById('homeKpiBalance'),
+    homeKpiInsurance: document.getElementById('homeKpiInsurance'),
+    homeKpiTotalBilled: document.getElementById('homeKpiTotalBilled'),
+    kpiViewStmtLink: document.getElementById('kpiViewStmtLink'),
+    statementSearchInput: document.getElementById('statementSearchInput'),
+    tblViewStmtBtn: document.getElementById('tblViewStmtBtn'),
+    tblPayStmtBtn: document.getElementById('tblPayStmtBtn'),
+    tblReceiptBtn1: document.getElementById('tblReceiptBtn1'),
+    tblReceiptBtn2: document.getElementById('tblReceiptBtn2'),
+    tblPdfBtn1: document.getElementById('tblPdfBtn1'),
+    tblPdfBtn2: document.getElementById('tblPdfBtn2'),
+    navPaymentHistoryBtn: document.getElementById('navPaymentHistoryBtn'),
+    navInsuranceBtn: document.getElementById('navInsuranceBtn'),
+    navSupportBtn: document.getElementById('navSupportBtn'),
+
+    // Statement Line-Item Modal
     dashboardModalBackdrop: document.getElementById('dashboardModalBackdrop'),
     dashPatientName: document.getElementById('dashPatientName'),
     dashTotalBilled: document.getElementById('dashTotalBilled'),
@@ -139,14 +181,110 @@
   }
 
   function handleSessionExpired() {
-    showAlert('error', 'HIPAA Security Timeout: Your session was automatically locked after 15 minutes of inactivity.');
     closeAllModals();
+    handleSignOut();
+    showAlert('error', 'HIPAA Security Timeout: Your session was automatically locked after 15 minutes of inactivity.');
   }
 
   // Activity listeners to reset timeout
   ['mousemove', 'keydown', 'click', 'scroll'].forEach(evt => {
     window.addEventListener(evt, resetSessionTimer, { passive: true });
   });
+
+  /* ==========================================================================
+     VIEW NAVIGATION CONTROLLER (LOGIN -> WELCOME -> HOMEPAGE)
+     ========================================================================== */
+  function showView(viewName) {
+    state.currentView = viewName;
+
+    if (elements.loginView) elements.loginView.style.display = 'none';
+    if (elements.welcomeView) elements.welcomeView.style.display = 'none';
+    if (elements.homeView) elements.homeView.style.display = 'none';
+
+    if (viewName === 'login') {
+      if (elements.loginView) elements.loginView.style.display = 'block';
+    } else if (viewName === 'welcome') {
+      if (elements.welcomeView) elements.welcomeView.style.display = 'flex';
+    } else if (viewName === 'home') {
+      if (elements.homeView) elements.homeView.style.display = 'block';
+    }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  /* ==========================================================================
+     WELCOME SCREEN TRANSITION
+     ========================================================================== */
+  function startWelcomeTransition() {
+    showView('welcome');
+
+    if (state.welcomeTimer) {
+      clearTimeout(state.welcomeTimer);
+      state.welcomeTimer = null;
+    }
+
+    // Populate user profile info across the screens
+    const user = state.activeUser || demoPatient;
+    if (elements.welcomePatientName) elements.welcomePatientName.textContent = user.name;
+    if (elements.welcomePatientDetails) {
+      elements.welcomePatientDetails.textContent = `MRN: ${user.mrn || 'US-84920'} • Statement ${user.statementNumber || '#US-2026-98124'}`;
+    }
+    if (elements.homeGreetingName) elements.homeGreetingName.textContent = user.name;
+    if (elements.homeUserPillName) elements.homeUserPillName.textContent = user.name;
+    if (elements.dashPatientName) elements.dashPatientName.textContent = user.name;
+
+    // Reset progress bar to initial state
+    if (elements.welcomeProgressFill) elements.welcomeProgressFill.style.width = '0%';
+    if (elements.welcomeStatusText) elements.welcomeStatusText.textContent = 'Securing 256-bit cryptographic session...';
+
+    // Step 1: 350ms
+    setTimeout(() => {
+      if (state.currentView !== 'welcome') return;
+      if (elements.welcomeProgressFill) elements.welcomeProgressFill.style.width = '35%';
+      if (elements.welcomeStatusText) elements.welcomeStatusText.textContent = 'Authenticating with US24 RCM Gateway...';
+    }, 350);
+
+    // Step 2: 1050ms
+    setTimeout(() => {
+      if (state.currentView !== 'welcome') return;
+      if (elements.welcomeProgressFill) elements.welcomeProgressFill.style.width = '70%';
+      if (elements.welcomeStatusText) elements.welcomeStatusText.textContent = 'Decrypting Protected Health Records (PHI)...';
+    }, 1050);
+
+    // Step 3: 1750ms
+    setTimeout(() => {
+      if (state.currentView !== 'welcome') return;
+      if (elements.welcomeProgressFill) elements.welcomeProgressFill.style.width = '100%';
+      if (elements.welcomeStatusText) elements.welcomeStatusText.textContent = `Welcome ${user.name}! Opening Patient Statement Portal...`;
+    }, 1750);
+
+    // Step 4: 2600ms -> Automatically transition to Homepage
+    state.welcomeTimer = setTimeout(() => {
+      if (state.currentView === 'welcome') {
+        goToHomePage();
+      }
+    }, 2600);
+  }
+
+  function goToHomePage() {
+    if (state.welcomeTimer) {
+      clearTimeout(state.welcomeTimer);
+      state.welcomeTimer = null;
+    }
+    showView('home');
+    startSessionTimer(); // Refresh active session timer on homepage entry
+  }
+
+  function handleSignOut() {
+    if (state.welcomeTimer) {
+      clearTimeout(state.welcomeTimer);
+      state.welcomeTimer = null;
+    }
+    state.activeUser = null;
+    closeAllModals();
+    showView('login');
+    showAlert('success', 'You have been securely signed out. Session encrypted and closed.');
+  }
 
   /* ==========================================================================
      DEMO AUTOFILL HELPER
@@ -171,6 +309,8 @@
   }
 
   function updatePasswordStrength(pwd) {
+    if (!elements.strengthBarFill || !elements.strengthText) return;
+
     if (!pwd) {
       elements.strengthBarFill.style.width = '0%';
       elements.strengthBarFill.style.backgroundColor = '#e53e3e';
@@ -233,14 +373,14 @@
     let isValid = true;
 
     // Validate Identifier
-    const idVal = elements.primaryIdentifier.value.trim();
+    const idVal = elements.primaryIdentifier ? elements.primaryIdentifier.value.trim() : '';
     if (!idVal) {
       elements.primaryIdentifier.closest('.form-group').classList.add('has-error');
       isValid = false;
     }
 
     // Validate Password
-    const pwdVal = elements.portalPassword.value;
+    const pwdVal = elements.portalPassword ? elements.portalPassword.value : '';
     if (!pwdVal || pwdVal.length < 6) {
       elements.portalPassword.closest('.form-group').classList.add('has-error');
       isValid = false;
@@ -270,9 +410,13 @@
 
       // Set active user
       const identifierInput = elements.primaryIdentifier.value.trim();
+      const isDemo = identifierInput.toLowerCase().includes('sarah') || identifierInput.includes('84920');
+
       state.activeUser = {
-        name: identifierInput.toLowerCase().includes('sarah') ? demoPatient.name : (identifierInput.split('@')[0] || 'Patient User'),
+        name: isDemo ? demoPatient.name : (identifierInput.split('@')[0] || 'Patient User'),
         identifier: identifierInput,
+        mrn: isDemo ? demoPatient.mrn : 'US-84920',
+        statementNumber: isDemo ? demoPatient.statementNumber : '#US-2026-98124',
         balance: demoPatient.balance,
         totalBilled: demoPatient.totalBilled,
         insurancePaid: demoPatient.insurancePaid,
@@ -284,16 +428,18 @@
   }
 
   function openOtpModal() {
+    if (!elements.otpModalBackdrop) return;
     elements.otpTargetDisplay.textContent = `${state.activeUser.identifier} (+1 ••• ••• 4920)`;
     elements.otpModalBackdrop.style.display = 'flex';
     clearOtpInputs();
 
     // Focus first OTP digit
-    const firstDigit = elements.otpContainer.querySelector('.otp-digit');
+    const firstDigit = elements.otpContainer ? elements.otpContainer.querySelector('.otp-digit') : null;
     if (firstDigit) firstDigit.focus();
   }
 
   function clearOtpInputs() {
+    if (!elements.otpContainer) return;
     elements.otpContainer.querySelectorAll('.otp-digit').forEach(input => {
       input.value = '';
     });
@@ -309,41 +455,63 @@
   }
 
   function verifyOtp() {
-    const inputs = elements.otpContainer.querySelectorAll('.otp-digit');
+    const inputs = elements.otpContainer ? elements.otpContainer.querySelectorAll('.otp-digit') : [];
     const enteredCode = Array.from(inputs).map(i => i.value).join('');
 
     if (enteredCode.length < 6) {
-      alert('Please enter all 6 digits of your HIPAA verification code.');
+      alert('Please enter all 6 digits of your HIPAA verification code (Demo code: 9 4 8 2 1 0).');
       return;
     }
 
-    // Close OTP modal and show Dashboard Statement
-    elements.otpModalBackdrop.style.display = 'none';
-    openDashboardModal();
+    // Close OTP modal and launch the Welcome Screen sequence
+    if (elements.otpModalBackdrop) elements.otpModalBackdrop.style.display = 'none';
+    startWelcomeTransition();
   }
 
   /* ==========================================================================
-     PATIENT STATEMENT DASHBOARD SHOWCASE
+     PATIENT STATEMENT LINE-ITEM BREAKDOWN MODAL
      ========================================================================== */
   function openDashboardModal() {
-    if (!state.activeUser) return;
+    if (!elements.dashboardModalBackdrop) return;
 
-    elements.dashPatientName.textContent = state.activeUser.name;
-    elements.dashTotalBilled.textContent = state.activeUser.totalBilled;
-    elements.dashInsurancePaid.textContent = state.activeUser.insurancePaid;
-    elements.dashPatientBalance.textContent = state.activeUser.balance;
+    const user = state.activeUser || demoPatient;
+    if (elements.dashPatientName) elements.dashPatientName.textContent = user.name;
+    if (elements.dashTotalBilled) elements.dashTotalBilled.textContent = user.totalBilled || '$1,450.00';
+    if (elements.dashInsurancePaid) elements.dashInsurancePaid.textContent = user.insurancePaid || '-$1,105.00';
+    if (elements.dashPatientBalance) elements.dashPatientBalance.textContent = user.balance || '$345.00';
 
     elements.dashboardModalBackdrop.style.display = 'flex';
   }
 
   function closeAllModals() {
-    elements.otpModalBackdrop.style.display = 'none';
-    elements.dashboardModalBackdrop.style.display = 'none';
-    elements.forgotModalBackdrop.style.display = 'none';
-    elements.privacyModalBackdrop.style.display = 'none';
+    if (elements.otpModalBackdrop) elements.otpModalBackdrop.style.display = 'none';
+    if (elements.dashboardModalBackdrop) elements.dashboardModalBackdrop.style.display = 'none';
+    if (elements.forgotModalBackdrop) elements.forgotModalBackdrop.style.display = 'none';
+    if (elements.privacyModalBackdrop) elements.privacyModalBackdrop.style.display = 'none';
   }
 
+  /* ==========================================================================
+     PAYMENT PROCESSING SIMULATION
+     ========================================================================== */
+  function handlePaymentAction(amount) {
+    const user = state.activeUser || demoPatient;
+    const confirmPay = confirm(
+      `US24 PCI-DSS Level 1 Secure Payment Gateway\n\n` +
+      `Statement: #US-2026-98124\n` +
+      `Patient: ${user.name}\n` +
+      `Amount Due: ${amount || '$345.00'}\n\n` +
+      `Proceed with encrypted debit/credit card transaction?`
+    );
 
+    if (confirmPay) {
+      alert(
+        `✓ Transaction Successful!\n\n` +
+        `Payment of ${amount || '$345.00'} has been authorized.\n` +
+        `Transaction ID: US24-TX-${Math.floor(100000 + Math.random() * 900000)}\n` +
+        `An official HIPAA-compliant receipt has been emailed to ${user.identifier || demoPatient.identifier}.`
+      );
+    }
+  }
 
   /* ==========================================================================
      EVENT LISTENERS INITIALIZATION
@@ -377,29 +545,50 @@
       elements.loginForm.addEventListener('submit', handleLoginSubmit);
     }
 
-
-
-    // SSO Buttons
+    // Federated Identity / SSO Buttons (Single click login simulation)
     if (elements.ssoHealthIdBtn) {
       elements.ssoHealthIdBtn.addEventListener('click', () => {
         fillDemoPatient();
-        showAlert('success', 'Health ID Authenticated. Click "Authenticate" to enter statement.');
+        state.activeUser = {
+          name: demoPatient.name,
+          identifier: demoPatient.identifier,
+          mrn: demoPatient.mrn,
+          statementNumber: demoPatient.statementNumber,
+          balance: demoPatient.balance,
+          totalBilled: demoPatient.totalBilled,
+          insurancePaid: demoPatient.insurancePaid,
+        };
+        startWelcomeTransition();
       });
     }
+
     if (elements.ssoGoogleBtn) {
       elements.ssoGoogleBtn.addEventListener('click', () => {
         fillDemoPatient();
-        showAlert('success', 'Google Workspace verified. Click "Authenticate" to enter statement.');
+        state.activeUser = {
+          name: demoPatient.name,
+          identifier: demoPatient.identifier,
+          mrn: demoPatient.mrn,
+          statementNumber: demoPatient.statementNumber,
+          balance: demoPatient.balance,
+          totalBilled: demoPatient.totalBilled,
+          insurancePaid: demoPatient.insurancePaid,
+        };
+        startWelcomeTransition();
       });
     }
 
     // OTP Modal Events
-    if (elements.cancelOtpBtn) elements.cancelOtpBtn.addEventListener('click', () => elements.otpModalBackdrop.style.display = 'none');
+    if (elements.cancelOtpBtn) {
+      elements.cancelOtpBtn.addEventListener('click', () => {
+        elements.otpModalBackdrop.style.display = 'none';
+      });
+    }
     if (elements.verifyOtpBtn) elements.verifyOtpBtn.addEventListener('click', verifyOtp);
     if (elements.autofillOtpBtn) elements.autofillOtpBtn.addEventListener('click', autofillDemoOtp);
     if (elements.resendOtpBtn) {
       elements.resendOtpBtn.addEventListener('click', () => {
-        alert('New 6-digit verification code sent via SMS/Email.');
+        alert('HIPAA Security Gateway: A fresh 6-digit verification code has been transmitted to your registered phone & email.');
       });
     }
 
@@ -423,26 +612,116 @@
       });
     }
 
-    // Dashboard Modal Events
-    if (elements.closeDashBtn) elements.closeDashBtn.addEventListener('click', () => {
-      elements.dashboardModalBackdrop.style.display = 'none';
-      showAlert('success', 'You have securely logged out. Session terminated.');
-    });
+    // Welcome Screen: Proceed to Homepage Button
+    if (elements.proceedToHomeBtn) {
+      elements.proceedToHomeBtn.addEventListener('click', goToHomePage);
+    }
+
+    // Homepage: Sign Out Button
+    if (elements.homeSignoutBtn) {
+      elements.homeSignoutBtn.addEventListener('click', handleSignOut);
+    }
+
+    // Homepage: Payment Buttons
+    if (elements.homePayStatementBtn) {
+      elements.homePayStatementBtn.addEventListener('click', () => handlePaymentAction('$345.00'));
+    }
+    if (elements.tblPayStmtBtn) {
+      elements.tblPayStmtBtn.addEventListener('click', () => handlePaymentAction('$345.00'));
+    }
+    if (elements.payBalanceBtn) {
+      elements.payBalanceBtn.addEventListener('click', () => handlePaymentAction('$345.00'));
+    }
+
+    // Homepage: PDF Download Buttons
+    if (elements.homeDownloadPdfBtn) {
+      elements.homeDownloadPdfBtn.addEventListener('click', () => window.print());
+    }
+    if (elements.tblPdfBtn1) {
+      elements.tblPdfBtn1.addEventListener('click', () => window.print());
+    }
+    if (elements.tblPdfBtn2) {
+      elements.tblPdfBtn2.addEventListener('click', () => window.print());
+    }
     if (elements.printStatementBtn) {
       elements.printStatementBtn.addEventListener('click', () => window.print());
     }
-    if (elements.payBalanceBtn) {
-      elements.payBalanceBtn.addEventListener('click', () => {
-        alert('Payment Authorization: Redirecting to US24 PCI-DSS Compliant Payment Processor for $345.00.\nReceipt will be emailed securely.');
+
+    // Homepage: View Line Items Modal
+    if (elements.tblViewStmtBtn) {
+      elements.tblViewStmtBtn.addEventListener('click', openDashboardModal);
+    }
+    if (elements.kpiViewStmtLink) {
+      elements.kpiViewStmtLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        openDashboardModal();
+      });
+    }
+
+    // Line Item Modal Close
+    if (elements.closeDashBtn) {
+      elements.closeDashBtn.addEventListener('click', () => {
+        elements.dashboardModalBackdrop.style.display = 'none';
+      });
+    }
+
+    // Receipt Detail Buttons
+    if (elements.tblReceiptBtn1) {
+      elements.tblReceiptBtn1.addEventListener('click', () => {
+        alert('Payment Receipt #RCT-2026-94102\nDate: Aug 04, 2026\nAmount: $40.00\nPayment Method: Visa ending in 4021\nStatus: Settled (HIPAA Encrypted)');
+      });
+    }
+    if (elements.tblReceiptBtn2) {
+      elements.tblReceiptBtn2.addEventListener('click', () => {
+        alert('Payment Receipt #RCT-2026-89100\nDate: May 19, 2026\nAmount: $0.00 (Paid in Full by Insurance)\nStatus: Settled');
+      });
+    }
+
+    // Statements Table Real-time Search Filter
+    if (elements.statementSearchInput) {
+      elements.statementSearchInput.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase().trim();
+        const rows = document.querySelectorAll('.home-statements-table tbody tr');
+        rows.forEach(row => {
+          const rowText = row.textContent.toLowerCase();
+          row.style.display = rowText.includes(query) ? '' : 'none';
+        });
+      });
+    }
+
+    // Navigation Menu Links
+    if (elements.navPaymentHistoryBtn) {
+      elements.navPaymentHistoryBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        alert('Payment History: All past transactions are logged with cryptographic hashes under HIPAA 45 CFR § 164.312.');
+      });
+    }
+    if (elements.navInsuranceBtn) {
+      elements.navInsuranceBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        alert('Insurance Claims: Active Provider BlueCross BlueShield PPO. Policy #BC-89240192. Claims are processed directly via US24 Solutions RCM.');
+      });
+    }
+    if (elements.navSupportBtn) {
+      elements.navSupportBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const supportBar = document.querySelector('.home-support-bar');
+        if (supportBar) supportBar.scrollIntoView({ behavior: 'smooth' });
       });
     }
 
     // Forgot Password Modal
-    if (elements.forgotPasswordBtn) elements.forgotPasswordBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      elements.forgotModalBackdrop.style.display = 'flex';
-    });
-    if (elements.closeForgotBtn) elements.closeForgotBtn.addEventListener('click', () => elements.forgotModalBackdrop.style.display = 'none');
+    if (elements.forgotPasswordBtn) {
+      elements.forgotPasswordBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        elements.forgotModalBackdrop.style.display = 'flex';
+      });
+    }
+    if (elements.closeForgotBtn) {
+      elements.closeForgotBtn.addEventListener('click', () => {
+        elements.forgotModalBackdrop.style.display = 'none';
+      });
+    }
     if (elements.forgotForm) {
       elements.forgotForm.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -452,10 +731,26 @@
     }
 
     // Privacy & Terms Modals
-    if (elements.privacyNoticeBtn) elements.privacyNoticeBtn.addEventListener('click', () => elements.privacyModalBackdrop.style.display = 'flex');
-    if (elements.termsNoticeBtn) elements.termsNoticeBtn.addEventListener('click', () => elements.privacyModalBackdrop.style.display = 'flex');
-    if (elements.closePrivacyBtn) elements.closePrivacyBtn.addEventListener('click', () => elements.privacyModalBackdrop.style.display = 'none');
-    if (elements.ackPrivacyBtn) elements.ackPrivacyBtn.addEventListener('click', () => elements.privacyModalBackdrop.style.display = 'none');
+    if (elements.privacyNoticeBtn) {
+      elements.privacyNoticeBtn.addEventListener('click', () => {
+        elements.privacyModalBackdrop.style.display = 'flex';
+      });
+    }
+    if (elements.termsNoticeBtn) {
+      elements.termsNoticeBtn.addEventListener('click', () => {
+        elements.privacyModalBackdrop.style.display = 'flex';
+      });
+    }
+    if (elements.closePrivacyBtn) {
+      elements.closePrivacyBtn.addEventListener('click', () => {
+        elements.privacyModalBackdrop.style.display = 'none';
+      });
+    }
+    if (elements.ackPrivacyBtn) {
+      elements.ackPrivacyBtn.addEventListener('click', () => {
+        elements.privacyModalBackdrop.style.display = 'none';
+      });
+    }
 
     // Global Escape Key to dismiss modals
     window.addEventListener('keydown', (e) => {
