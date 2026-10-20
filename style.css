@@ -907,21 +907,7 @@ body.theme-dark .custom-checkbox-label input:checked + .custom-checkbox-box {
   font-weight: 800;
 }
 
-.quick-pay-link {
-  font-size: 0.8125rem;
-  font-weight: 700;
-  color: var(--us24-orange);
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  transition: all var(--transition-fast);
-}
 
-.quick-pay-link:hover {
-  color: var(--us24-orange-hover);
-  transform: translateX(2px);
-}
 
 /* Submit Button */
 .submit-auth-btn {
@@ -1075,81 +1061,7 @@ body.theme-dark .text-link-btn {
   color: var(--text-light);
 }
 
-/* ==========================================================================
-   QUICK PAY CARD
-   ========================================================================== */
-.quick-pay-card {
-  width: 100%;
-  max-width: 530px;
-  background: var(--bg-card);
-  backdrop-filter: blur(16px);
-  border: 1px solid var(--bg-card-border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
-  padding: 36px;
-  animation: slide-up 0.3s ease-out;
-}
 
-@keyframes slide-up {
-  from { opacity: 0; transform: translateY(14px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.quick-pay-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 8px;
-}
-
-.quick-pay-badge {
-  display: inline-block;
-  background: var(--us24-orange-soft);
-  color: var(--us24-orange);
-  font-size: 0.6875rem;
-  font-weight: 700;
-  padding: 3px 8px;
-  border-radius: 4px;
-  text-transform: uppercase;
-  margin-bottom: 4px;
-}
-
-.quick-pay-header h3 {
-  font-family: var(--font-heading);
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--text-main);
-}
-
-.close-card-btn {
-  background: none;
-  border: none;
-  color: var(--text-light);
-  cursor: pointer;
-  padding: 6px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all var(--transition-fast);
-}
-
-.close-card-btn:hover {
-  background: rgba(0, 0, 0, 0.06);
-  color: var(--text-main);
-}
-
-.quick-pay-desc {
-  font-size: 0.875rem;
-  color: var(--text-muted);
-  margin-bottom: 24px;
-}
-
-.form-row-2col {
-  display: grid;
-  grid-template-columns: 1.4fr 1fr;
-  gap: 12px;
-}
 
 /* ==========================================================================
    MODAL WINDOWS & BACKDROPS (2FA, DASHBOARD, FORGOT PASSWORD, PRIVACY)

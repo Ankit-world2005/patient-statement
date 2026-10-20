@@ -60,13 +60,6 @@
     alertMessage: document.getElementById('alertMessage'),
     alertCloseBtn: document.getElementById('alertCloseBtn'),
 
-    // Quick Pay
-    quickPayBtn: document.getElementById('quickPayBtn'),
-    quickPayCard: document.getElementById('quickPayCard'),
-    closeQuickPayBtn: document.getElementById('closeQuickPayBtn'),
-    quickPayForm: document.getElementById('quickPayForm'),
-    authCard: document.getElementById('authCard'),
-
     // SSO Buttons
     ssoHealthIdBtn: document.getElementById('ssoHealthIdBtn'),
     ssoGoogleBtn: document.getElementById('ssoGoogleBtn'),
@@ -350,18 +343,7 @@
     elements.privacyModalBackdrop.style.display = 'none';
   }
 
-  /* ==========================================================================
-     QUICK PAY TOGGLE
-     ========================================================================== */
-  function showQuickPay() {
-    elements.authCard.style.display = 'none';
-    elements.quickPayCard.style.display = 'block';
-  }
 
-  function hideQuickPay() {
-    elements.quickPayCard.style.display = 'none';
-    elements.authCard.style.display = 'block';
-  }
 
   /* ==========================================================================
      EVENT LISTENERS INITIALIZATION
@@ -395,15 +377,7 @@
       elements.loginForm.addEventListener('submit', handleLoginSubmit);
     }
 
-    // Quick Pay
-    if (elements.quickPayBtn) elements.quickPayBtn.addEventListener('click', (e) => { e.preventDefault(); showQuickPay(); });
-    if (elements.closeQuickPayBtn) elements.closeQuickPayBtn.addEventListener('click', hideQuickPay);
-    if (elements.quickPayForm) {
-      elements.quickPayForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        alert('Statement Verified! Redirecting to US24 Encrypted Payment Gateway (Card/HSA/FSA/eCheck)...');
-      });
-    }
+
 
     // SSO Buttons
     if (elements.ssoHealthIdBtn) {

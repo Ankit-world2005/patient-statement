@@ -262,13 +262,6 @@
               <span class="custom-checkbox-box"></span>
               <span class="checkbox-text">Trust this HIPAA-compliant workstation for 30 days</span>
             </label>
-            <a href="#quickPay" class="quick-pay-link" id="quickPayBtn" title="Pay with Statement # without logging in">
-              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
-                <line x1="1" y1="10" x2="23" y2="10"/>
-              </svg>
-              Quick Pay (No Login)
-            </a>
           </div>
 
           <!-- Submit Button -->
@@ -324,42 +317,7 @@
         </footer>
       </div>
 
-      <!-- Quick Statement Pay Card (Direct access without full login) -->
-      <div class="quick-pay-card" id="quickPayCard" style="display: none;">
-        <div class="quick-pay-header">
-          <div class="quick-pay-title-group">
-            <span class="quick-pay-badge">Guest Checkout</span>
-            <h3>Express Statement Payment</h3>
-          </div>
-          <button type="button" class="close-card-btn" id="closeQuickPayBtn" aria-label="Back to login">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="18" y1="6" x2="6" y2="18"/>
-              <line x1="6" y1="6" x2="18" y2="18"/>
-            </svg>
-          </button>
-        </div>
-        <p class="quick-pay-desc">Pay your outstanding patient balance in 60 seconds without creating an account.</p>
-        
-        <form id="quickPayForm">
-          <div class="form-row-2col">
-            <div class="form-group">
-              <label for="statementNumber" class="form-label">Statement / Invoice #</label>
-              <input type="text" id="statementNumber" class="form-input" placeholder="e.g. STMT-2026-9481" required>
-            </div>
-            <div class="form-group">
-              <label for="statementAccessCode" class="form-label">Access Code / PIN</label>
-              <input type="text" id="statementAccessCode" class="form-input" placeholder="e.g. 7482" maxlength="6" required>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="quickPayDob" class="form-label">Patient Date of Birth</label>
-            <input type="date" id="quickPayDob" class="form-input" required>
-          </div>
-          <button type="submit" class="submit-auth-btn">
-            Lookup Statement &amp; Pay Securely
-          </button>
-        </form>
-      </div>
+
     </main>
   </div>
 
