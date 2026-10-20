@@ -49,10 +49,6 @@
     identifierLabel: document.getElementById('identifierLabel'),
     primaryIdentifier: document.getElementById('primaryIdentifier'),
     identifierError: document.getElementById('identifierError'),
-    patientDobGroup: document.getElementById('patientDobGroup'),
-    patientDob: document.getElementById('patientDob'),
-    dobError: document.getElementById('dobError'),
-    dobHelpTrigger: document.getElementById('dobHelpTrigger'),
     portalPassword: document.getElementById('portalPassword'),
     passwordError: document.getElementById('passwordError'),
     togglePasswordBtn: document.getElementById('togglePasswordBtn'),
@@ -164,7 +160,6 @@
      ========================================================================== */
   function fillDemoPatient() {
     if (elements.primaryIdentifier) elements.primaryIdentifier.value = demoPatient.identifier;
-    if (elements.patientDob) elements.patientDob.value = demoPatient.dob;
     if (elements.portalPassword) {
       elements.portalPassword.value = demoPatient.password;
       updatePasswordStrength(demoPatient.password);
@@ -249,15 +244,6 @@
     if (!idVal) {
       elements.primaryIdentifier.closest('.form-group').classList.add('has-error');
       isValid = false;
-    }
-
-    // Validate DOB
-    if (elements.patientDob) {
-      const dobVal = elements.patientDob.value;
-      if (!dobVal) {
-        elements.patientDob.closest('.form-group').classList.add('has-error');
-        isValid = false;
-      }
     }
 
     // Validate Password
@@ -407,13 +393,6 @@
     // Form submit
     if (elements.loginForm) {
       elements.loginForm.addEventListener('submit', handleLoginSubmit);
-    }
-
-    // DOB hint trigger
-    if (elements.dobHelpTrigger) {
-      elements.dobHelpTrigger.addEventListener('click', () => {
-        alert('HIPAA Privacy Protection Rule (§ 164.514):\nDate of birth is verified against your electronic medical record to confirm identity before disclosing protected health statements.');
-      });
     }
 
     // Quick Pay

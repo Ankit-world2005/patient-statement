@@ -205,41 +205,7 @@
             <span class="input-error-msg" id="identifierError" role="alert">Please provide a valid email, Account #, or Statement #.</span>
           </div>
 
-          <!-- Secondary Patient Field (Only shown for Patient tab: Date of Birth verification) -->
-          <div class="form-group" id="patientDobGroup">
-            <div class="label-with-hint">
-              <label for="patientDob" class="form-label">
-                Patient Date of Birth (HIPAA Identity Verification)
-                <span class="required-star">*</span>
-              </label>
-              <button type="button" class="hint-tooltip-trigger" id="dobHelpTrigger" aria-label="Why is Date of Birth required?">
-                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="12" cy="12" r="10"/>
-                  <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
-                  <line x1="12" y1="17" x2="12.01" y2="17"/>
-                </svg>
-              </button>
-            </div>
-            <div class="input-wrapper">
-              <span class="input-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                  <line x1="16" y1="2" x2="16" y2="6"/>
-                  <line x1="8" y1="2" x2="8" y2="6"/>
-                  <line x1="3" y1="10" x2="21" y2="10"/>
-                </svg>
-              </span>
-              <input 
-                type="date" 
-                id="patientDob" 
-                name="dob" 
-                class="form-input" 
-                required
-                aria-required="true"
-                aria-describedby="dobError">
-            </div>
-            <span class="input-error-msg" id="dobError" role="alert">Patient DOB is required for HIPAA identity verification.</span>
-          </div>
+
 
           <!-- Password Field -->
           <div class="form-group" id="passwordGroup">
