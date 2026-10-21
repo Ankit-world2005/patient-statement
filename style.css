@@ -2163,6 +2163,7 @@ body.theme-dark .admin-clinic-select:hover, body.theme-dark .admin-clinic-select
   display: flex;
   align-items: center;
   gap: 14px;
+  flex-shrink: 0;
 }
 
 .rcm-live-badge {
@@ -2175,6 +2176,7 @@ body.theme-dark .admin-clinic-select:hover, body.theme-dark .admin-clinic-select
   font-weight: 700;
   padding: 4px 10px;
   border-radius: var(--radius-pill);
+  white-space: nowrap;
 }
 
 body.theme-dark .rcm-live-badge {
@@ -2194,6 +2196,33 @@ body.theme-dark .rcm-live-badge {
   0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(47, 161, 119, 0.7); }
   70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(47, 161, 119, 0); }
   100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(47, 161, 119, 0); }
+}
+
+.hipaa-secure-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--us24-navy);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+body.theme-dark .hipaa-secure-chip {
+  color: var(--us24-tech-blue);
+}
+
+/* Admin Top Bar Logo: matches the compact header height */
+.dash-company-logo {
+  height: 32px;
+  width: auto;
+  object-fit: contain;
+}
+
+body.theme-dark .dash-company-logo {
+  background: #ffffff;
+  padding: 3px 8px;
+  border-radius: 5px;
 }
 
 /* Admin Main Content */
@@ -3176,6 +3205,9 @@ body.theme-dark .batch-progress-fill {
 @media (max-width: 768px) {
   .admin-topbar {
     padding: 10px 16px;
+  }
+  .dash-company-logo {
+    height: 26px;
   }
   .admin-main-content {
     padding: 16px;
