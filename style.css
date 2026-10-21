@@ -1097,7 +1097,20 @@ body.theme-dark .text-link-btn {
 }
 
 .modal-dialog.modal-large {
-  max-width: 820px;
+  max-width: 900px;
+}
+
+.modal-large .modal-scroll {
+  max-height: min(62vh, 560px);
+}
+
+.modal-large .statement-table th,
+.modal-large .statement-table td {
+  padding: 10px 12px;
+}
+
+.modal-large .statement-table th {
+  font-size: 0.75rem;
 }
 
 @keyframes scale-up {
@@ -2054,6 +2067,8 @@ body.theme-dark .hub-company-logo {
   border-bottom: 1px solid var(--bg-card-border);
   padding: 10px 32px;
   display: flex;
+  flex-wrap: wrap;
+  gap: 10px 20px;
   align-items: center;
   justify-content: space-between;
   position: sticky;
@@ -2100,6 +2115,7 @@ body.theme-dark .btn-back-hub:hover {
 
 .admin-identity-meta {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 10px;
   font-size: 0.8125rem;
@@ -2108,6 +2124,7 @@ body.theme-dark .btn-back-hub:hover {
 
 .admin-role-badge {
   display: inline-flex;
+  white-space: nowrap;
   align-items: center;
   gap: 5px;
   background: rgba(36, 57, 137, 0.09);
@@ -2131,6 +2148,7 @@ body.theme-dark .admin-role-badge {
   display: flex;
   align-items: center;
   gap: 6px;
+  white-space: nowrap;
 }
 
 .admin-clinic-select {
@@ -2164,6 +2182,7 @@ body.theme-dark .admin-clinic-select:hover, body.theme-dark .admin-clinic-select
   align-items: center;
   gap: 14px;
   flex-shrink: 0;
+  margin-left: auto;
 }
 
 .rcm-live-badge {
@@ -2234,7 +2253,7 @@ body.theme-dark .dash-company-logo {
 }
 
 .admin-dashboard-container {
-  max-width: 1240px;
+  max-width: 1320px;
   margin: 0 auto;
 }
 
@@ -2275,7 +2294,7 @@ body.theme-dark .admin-pill-tag {
 
 .admin-banner-title {
   font-family: var(--font-heading);
-  font-size: 1.625rem;
+  font-size: 1.5rem;
   font-weight: 800;
   color: var(--text-main);
   line-height: 1.2;
@@ -2432,7 +2451,7 @@ body.theme-dark .admin-kpi-badge.green {
 
 .admin-kpi-value {
   font-family: var(--font-heading);
-  font-size: 1.8125rem;
+  font-size: 1.5rem;
   font-weight: 800;
   color: var(--text-main);
   line-height: 1.1;
@@ -2477,7 +2496,7 @@ body.theme-dark .text-teal {
 
 .aging-card-title {
   font-family: var(--font-heading);
-  font-size: 1rem;
+  font-size: 1.0625rem;
   font-weight: 700;
   color: var(--text-main);
 }
@@ -2593,7 +2612,8 @@ body.theme-dark .text-teal {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 14px;
+  height: 30px;
+  padding: 0 12px;
   border-radius: 20px;
   font-family: var(--font-heading);
   font-size: 0.8125rem;
@@ -2625,7 +2645,8 @@ body.theme-dark .clinic-tab-btn.active {
 
 .clinic-tab-badge {
   font-size: 0.6875rem;
-  padding: 1px 6px;
+  line-height: 1.4;
+  padding: 0 6px;
   border-radius: 10px;
   background: rgba(0, 0, 0, 0.08);
 }
@@ -2659,7 +2680,8 @@ body.theme-dark .clinic-tab-btn.active {
 
 .admin-search-input {
   width: 100%;
-  padding: 8px 32px 8px 36px;
+  height: 34px;
+  padding: 0 32px 0 36px;
   border-radius: 6px;
   border: 1.5px solid var(--bg-input-border);
   background: var(--bg-input);
@@ -2704,7 +2726,8 @@ body.theme-dark .admin-search-input:focus {
 }
 
 .admin-select-filter {
-  padding: 7px 12px;
+  height: 34px;
+  padding: 0 12px;
   border-radius: 6px;
   border: 1.5px solid var(--bg-input-border);
   background: var(--bg-input);
@@ -2715,7 +2738,8 @@ body.theme-dark .admin-search-input:focus {
 }
 
 .btn-reset-filters {
-  padding: 7px 14px;
+  height: 34px;
+  padding: 0 14px;
   border-radius: 6px;
   border: 1px solid var(--bg-card-border);
   background: var(--bg-page);
@@ -2811,7 +2835,7 @@ body.theme-dark .admin-batch-bar {
   background: var(--bg-card);
   border: 1px solid var(--bg-card-border);
   border-radius: 14px;
-  padding: 20px 24px;
+  padding: 20px;
   box-shadow: 0 2px 10px rgba(23, 61, 85, 0.04);
 }
 
@@ -2824,7 +2848,7 @@ body.theme-dark .admin-batch-bar {
 
 .table-card-heading {
   font-family: var(--font-heading);
-  font-size: 1.125rem;
+  font-size: 1.0625rem;
   font-weight: 700;
   color: var(--text-main);
 }
@@ -2849,6 +2873,11 @@ body.theme-dark .table-counter-badge {
   background: rgba(115, 153, 230, 0.18);
 }
 
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+
 .admin-roster-table {
   width: 100%;
   border-collapse: collapse;
@@ -2857,19 +2886,21 @@ body.theme-dark .table-counter-badge {
 }
 
 .admin-roster-table th {
-  padding: 10px 12px;
+  padding: 10px 8px;
   background: var(--bg-page);
   color: var(--text-muted);
+  font-size: 0.75rem;
   font-weight: 700;
   border-bottom: 1.5px solid var(--bg-card-border);
   white-space: nowrap;
 }
 
 .admin-roster-table td {
-  padding: 11px 12px;
+  padding: 10px 8px;
   border-bottom: 1px solid var(--bg-card-border);
   color: var(--text-main);
   vertical-align: middle;
+  white-space: nowrap;
 }
 
 .admin-roster-table tbody tr:hover {
@@ -2966,18 +2997,18 @@ body.theme-dark .status-pill.status-paid {
 
 .th-actions {
   text-align: right;
-  min-width: 140px;
 }
 
 .admin-row-actions {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 6px;
+  gap: 4px;
 }
 
 .btn-row-action {
-  padding: 4px 8px;
+  padding: 4px 7px;
+  white-space: nowrap;
   border-radius: 5px;
   border: 1px solid var(--bg-card-border);
   background: var(--bg-page);
@@ -3087,13 +3118,19 @@ body.theme-dark .btn-row-action:hover {
 .detail-meta-row {
   display: flex;
   justify-content: space-between;
+  gap: 10px;
   font-size: 0.75rem;
   margin-bottom: 4px;
   color: var(--text-muted);
 }
 
+.detail-meta-row span {
+  white-space: nowrap;
+}
+
 .detail-meta-row strong {
   color: var(--text-main);
+  text-align: right;
 }
 
 .detail-meta-row.balance-row {
@@ -3135,6 +3172,13 @@ body.theme-dark .btn-row-action:hover {
 
 .audit-log-text {
   color: var(--text-main);
+}
+
+.field-hint {
+  display: block;
+  margin-top: 5px;
+  font-size: 0.6875rem;
+  color: var(--text-light);
 }
 
 /* Batch Progress Box */
@@ -3190,6 +3234,22 @@ body.theme-dark .batch-progress-fill {
 }
 
 /* Responsive Styles for Admin Dashboard */
+@media (max-width: 1300px) {
+  .admin-topbar {
+    padding: 10px 24px;
+  }
+  .admin-main-content {
+    padding: 20px 24px 40px;
+  }
+  .admin-table-card {
+    padding: 18px 16px;
+  }
+  .admin-roster-table th,
+  .admin-roster-table td {
+    padding: 10px 6px;
+  }
+}
+
 @media (max-width: 1024px) {
   .admin-kpi-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -3209,20 +3269,27 @@ body.theme-dark .batch-progress-fill {
   .dash-company-logo {
     height: 26px;
   }
+  .dash-meta-divider,
+  .dash-meta-dot,
+  .rcm-live-badge,
+  .hipaa-secure-chip {
+    display: none;
+  }
   .admin-main-content {
     padding: 16px;
-  }
-  .admin-kpi-grid {
-    grid-template-columns: 1fr;
   }
   .admin-filter-row {
     flex-direction: column;
     align-items: stretch;
   }
-  .aging-legend-grid {
+  .record-pay-summary {
     grid-template-columns: 1fr;
   }
-  .record-pay-summary {
+}
+
+@media (max-width: 560px) {
+  .admin-kpi-grid,
+  .aging-legend-grid {
     grid-template-columns: 1fr;
   }
 }
