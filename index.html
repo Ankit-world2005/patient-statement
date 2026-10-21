@@ -433,156 +433,367 @@
   <!-- ==========================================================================
        PATIENT STATEMENT NEW PAGE DASHBOARD
        ========================================================================== -->
+  <!-- ==========================================================================
+       PATIENT STATEMENT ADMIN LEVEL DASHBOARD
+       ========================================================================== -->
   <section id="dashboardView" class="view-panel dashboard-page-screen" style="display: none;">
-    <!-- Dashboard Top Bar: Back to hub button, Patient/Clinic Info, and US24 Logo -->
-    <header class="dashboard-topbar">
-      <div class="dash-top-left">
+    <!-- Admin Top Bar: Back to hub, Admin Identity, Clinic Scope, HIPAA & Logo -->
+    <header class="admin-topbar">
+      <div class="admin-top-left">
         <button type="button" class="btn-back-hub" id="backToHomeBtn" title="Back to Operations Hub">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="15 18 9 12 15 6"></polyline>
           </svg>
-          <span>Back</span>
+          <span>Back to Hub</span>
         </button>
         <span class="dash-meta-divider">|</span>
-        <div class="dash-patient-meta">
-          <span class="dash-meta-label">User ID:</span>
-          <strong class="dash-meta-val" id="dashMetaUserId">US24-84920</strong>
+        <div class="admin-identity-meta">
+          <span class="admin-role-badge">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2l8 4v6c0 5-3.5 9.5-8 10-4.5-.5-8-5-8-10V6l8-4z"/>
+              <path d="M9 12l2 2 4-4"/>
+            </svg>
+            Admin Console
+          </span>
+          <div class="admin-user-group">
+            <span class="dash-meta-label">User ID:</span>
+            <strong class="dash-meta-val" id="adminMetaUserId">US24-84920</strong>
+          </div>
           <span class="dash-meta-dot">•</span>
-          <span class="dash-meta-label">Clinic:</span>
-          <strong class="dash-meta-val" id="dashMetaClinic">Namaste</strong>
+          <div class="admin-scope-group">
+            <span class="dash-meta-label">Facility Scope:</span>
+            <select class="admin-clinic-select" id="adminClinicScopeSelect" aria-label="Select Facility Scope">
+              <option value="all">All Clinics (5 Facilities)</option>
+              <option value="Namaste">Namaste</option>
+              <option value="Arra">Arra</option>
+              <option value="Icure">Icure</option>
+              <option value="HariKrishna">HariKrishna</option>
+              <option value="Meyerland">Meyerland</option>
+            </select>
+          </div>
         </div>
       </div>
 
-      <div class="dash-top-right">
+      <div class="admin-top-right">
+        <div class="rcm-live-badge">
+          <span class="live-pulse-dot"></span>
+          <span>Live Clearinghouse Sync</span>
+        </div>
         <div class="hipaa-secure-chip">
           <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor">
             <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/>
           </svg>
-          <span>HIPAA Encrypted</span>
+          <span>HIPAA 256-Bit</span>
         </div>
         <img src="assets/us24-logo.png" alt="US24 Solutions" class="dash-company-logo">
       </div>
     </header>
 
-    <!-- Main Content Area of the Dashboard -->
-    <main class="dashboard-main-content">
-      <div class="dashboard-container">
+    <!-- Main Content Area of the Admin Dashboard -->
+    <main class="admin-main-content">
+      <div class="admin-dashboard-container">
         
-        <!-- Header Banner: Patient Statement Summary & Direct Actions -->
-        <div class="statement-banner">
-          <div class="banner-info-col">
-            <div class="statement-pill">Active Billing Statement</div>
-            <h1 class="statement-headline">Patient Statement #US-2026-98124</h1>
-            <p class="statement-patient-sub">
-              Account Holder: <strong id="dashHolderName">Sarah Jenkins</strong> &nbsp;•&nbsp; MRN: <strong>US-84920</strong> &nbsp;•&nbsp; Service Date: <strong>Oct 12, 2026</strong>
+        <!-- Executive Banner: Title, Description, and Admin Batch Actions -->
+        <div class="admin-header-banner">
+          <div class="admin-banner-info">
+            <div class="admin-pill-tag">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="16" rx="2"/>
+                <line x1="16" y1="2" x2="16" y2="6"/>
+                <line x1="8" y1="2" x2="8" y2="6"/>
+                <line x1="3" y1="10" x2="21" y2="10"/>
+              </svg>
+              <span>RCM Executive Management</span>
+            </div>
+            <h1 class="admin-banner-title">Patient Statement Administration</h1>
+            <p class="admin-banner-sub">
+              Multi-facility statement oversight, digital statement dispatch, real-time A/R aging analysis, and patient payment processing across all active clinics.
             </p>
           </div>
-          <div class="banner-action-col">
-            <button type="button" class="btn-dash-print" id="pagePrintBtn">
+          
+          <div class="admin-banner-actions">
+            <button type="button" class="btn-admin-action btn-admin-primary" id="adminBatchBtn">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+              <span>+ Generate Statement Batch</span>
+            </button>
+            <button type="button" class="btn-admin-action btn-admin-accent" id="adminBulkRemindBtn" title="Dispatch SMS/Email payment reminders to overdue accounts">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 2L11 13"/>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+              </svg>
+              <span>Send Bulk Reminders</span>
+            </button>
+            <button type="button" class="btn-admin-action btn-admin-secondary" id="adminExportCsvBtn" title="Export current statements roster as CSV">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              <span>Export CSV</span>
+            </button>
+            <button type="button" class="btn-admin-action btn-admin-secondary" id="adminPrintSummaryBtn" title="Print statement ledger summary">
               <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
                 <polyline points="6 9 6 2 18 2 18 9"/>
                 <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
                 <rect x="6" y="14" width="12" height="8"/>
               </svg>
-              <span>Print / Save PDF</span>
-            </button>
-            <button type="button" class="btn-dash-pay" id="pagePayBtn">
-              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
-                <line x1="1" y1="10" x2="23" y2="10"/>
-              </svg>
-              <span>Pay Outstanding Balance (<span id="dashPayAmount">$345.00</span>)</span>
+              <span>Print / PDF</span>
             </button>
           </div>
         </div>
 
-        <!-- 3 Financial Summary Cards -->
-        <div class="dashboard-kpi-grid">
-          <div class="dash-kpi-card">
-            <div class="dash-kpi-label">Total Billed Charges</div>
-            <div class="dash-kpi-value" id="pageTotalBilled">$1,450.00</div>
-            <div class="dash-kpi-sub">Standard medical service charges</div>
-          </div>
-          <div class="dash-kpi-card">
-            <div class="dash-kpi-label">Insurance Covered</div>
-            <div class="dash-kpi-value text-green" id="pageInsurancePaid">-$1,105.00</div>
-            <div class="dash-kpi-sub">BlueCross BlueShield (In-Network)</div>
-          </div>
-          <div class="dash-kpi-card highlight-due">
-            <div class="dash-kpi-label">Patient Balance Due</div>
-            <div class="dash-kpi-value text-orange" id="pagePatientBalance">$345.00</div>
-            <div class="dash-kpi-sub">Payment Due Date: Nov 15, 2026</div>
-          </div>
-        </div>
-
-        <!-- Line-Item Statement Breakdown Table -->
-        <div class="dashboard-table-card">
-          <div class="table-card-header">
-            <div>
-              <h2 class="table-card-title">Itemized Clinical Services &amp; Adjustments</h2>
-              <p class="table-card-desc">Detailed breakdown of clinical codes (CPT), provider notes, and insurer contractual adjustments.</p>
+        <!-- 4 Executive KPI Metric Cards -->
+        <div class="admin-kpi-grid">
+          <div class="admin-kpi-card">
+            <div class="admin-kpi-top">
+              <span class="admin-kpi-label">Active Statements</span>
+              <span class="admin-kpi-badge blue" id="kpiScopeTag">All Facilities</span>
             </div>
-            <span class="statement-status-tag">Payment Pending</span>
+            <div class="admin-kpi-value" id="kpiActiveStatements">1,842</div>
+            <div class="admin-kpi-sub">Total Charges: <strong id="kpiTotalBilled">$624,850.00</strong></div>
+          </div>
+
+          <div class="admin-kpi-card highlight-due">
+            <div class="admin-kpi-top">
+              <span class="admin-kpi-label">Patient A/R Balance</span>
+              <span class="admin-kpi-badge orange">Active Due</span>
+            </div>
+            <div class="admin-kpi-value text-orange" id="kpiPatientAr">$142,390.00</div>
+            <div class="admin-kpi-sub">Avg Balance: <strong id="kpiAvgBalance">$77.30 / stmt</strong></div>
+          </div>
+
+          <div class="admin-kpi-card">
+            <div class="admin-kpi-top">
+              <span class="admin-kpi-label">MTD Patient Collections</span>
+              <span class="admin-kpi-badge green">62.1% Yield</span>
+            </div>
+            <div class="admin-kpi-value text-green" id="kpiMtdCollections">$88,460.00</div>
+            <div class="admin-kpi-sub">Portal &amp; Point-of-Sale Settled</div>
+          </div>
+
+          <div class="admin-kpi-card">
+            <div class="admin-kpi-top">
+              <span class="admin-kpi-label">Digital Delivery Rate</span>
+              <span class="admin-kpi-badge teal">Paperless</span>
+            </div>
+            <div class="admin-kpi-value text-teal" id="kpiDeliveryRate">89.4%</div>
+            <div class="admin-kpi-sub"><span id="kpiDigitalCount">1,647</span> Digital • <span id="kpiPaperCount">195</span> Paper</div>
+          </div>
+        </div>
+
+        <!-- Aging Distribution Analysis Card -->
+        <div class="admin-aging-card">
+          <div class="aging-card-header">
+            <div class="aging-title-group">
+              <h3 class="aging-card-title">Patient A/R Aging Distribution</h3>
+              <p class="aging-card-desc">Aging breakdown of patient responsibility balances across all active statement cycles.</p>
+            </div>
+            <div class="aging-total-group">
+              <span class="aging-total-label">Total Outstanding:</span>
+              <strong class="aging-total-val" id="agingTotalVal">$142,390.00</strong>
+            </div>
+          </div>
+
+          <!-- Multi-Segment Visual Progress Bar -->
+          <div class="aging-progress-bar" id="agingProgressBar" role="progressbar" aria-label="Aging Distribution">
+            <div class="aging-bar-seg seg-current" style="width: 58%;" title="Current (0-30d): $82,450 (58%)"></div>
+            <div class="aging-bar-seg seg-30" style="width: 24%;" title="31-60 Days: $34,120 (24%)"></div>
+            <div class="aging-bar-seg seg-60" style="width: 12.5%;" title="61-90 Days: $17,800 (12.5%)"></div>
+            <div class="aging-bar-seg seg-90" style="width: 5.5%;" title="90+ Days: $8,020 (5.5%)"></div>
+          </div>
+
+          <!-- Aging Legend Pills -->
+          <div class="aging-legend-grid">
+            <div class="aging-legend-item">
+              <span class="aging-legend-dot dot-current"></span>
+              <div class="aging-legend-text">
+                <span class="aging-legend-bucket">Current (0-30 Days)</span>
+                <strong class="aging-legend-amount" id="agingAmountCurrent">$82,450.00 (58%)</strong>
+              </div>
+            </div>
+            <div class="aging-legend-item">
+              <span class="aging-legend-dot dot-30"></span>
+              <div class="aging-legend-text">
+                <span class="aging-legend-bucket">31 - 60 Days</span>
+                <strong class="aging-legend-amount" id="agingAmount30">$34,120.00 (24%)</strong>
+              </div>
+            </div>
+            <div class="aging-legend-item">
+              <span class="aging-legend-dot dot-60"></span>
+              <div class="aging-legend-text">
+                <span class="aging-legend-bucket">61 - 90 Days</span>
+                <strong class="aging-legend-amount" id="agingAmount60">$17,800.00 (12.5%)</strong>
+              </div>
+            </div>
+            <div class="aging-legend-item">
+              <span class="aging-legend-dot dot-90"></span>
+              <div class="aging-legend-text">
+                <span class="aging-legend-bucket">90+ Days (Collections Risk)</span>
+                <strong class="aging-legend-amount text-danger" id="agingAmount90">$8,020.00 (5.5%)</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter Controls Card: Clinic Tabs & Search/Status Selectors -->
+        <div class="admin-controls-card">
+          <!-- Multi-Clinic Quick Filter Tabs -->
+          <div class="clinic-filter-tabs" id="clinicFilterTabs">
+            <button type="button" class="clinic-tab-btn active" data-clinic="all">
+              <span>All Clinics</span>
+              <span class="clinic-tab-badge" id="tabBadgeAll">1,842</span>
+            </button>
+            <button type="button" class="clinic-tab-btn" data-clinic="Namaste">
+              <span>Namaste</span>
+              <span class="clinic-tab-badge" id="tabBadgeNamaste">420</span>
+            </button>
+            <button type="button" class="clinic-tab-btn" data-clinic="Arra">
+              <span>Arra</span>
+              <span class="clinic-tab-badge" id="tabBadgeArra">385</span>
+            </button>
+            <button type="button" class="clinic-tab-btn" data-clinic="Icure">
+              <span>Icure</span>
+              <span class="clinic-tab-badge" id="tabBadgeIcure">325</span>
+            </button>
+            <button type="button" class="clinic-tab-btn" data-clinic="HariKrishna">
+              <span>HariKrishna</span>
+              <span class="clinic-tab-badge" id="tabBadgeHariKrishna">392</span>
+            </button>
+            <button type="button" class="clinic-tab-btn" data-clinic="Meyerland">
+              <span>Meyerland</span>
+              <span class="clinic-tab-badge" id="tabBadgeMeyerland">320</span>
+            </button>
+          </div>
+
+          <!-- Secondary Filter Row -->
+          <div class="admin-filter-row">
+            <div class="admin-search-wrap">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" class="search-icon">
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+              <input type="text" id="adminSearchInput" class="admin-search-input" placeholder="Search patient name, MRN, statement #, phone..." aria-label="Search statements">
+              <button type="button" id="adminClearSearchBtn" class="search-clear-btn" style="display: none;" title="Clear search">×</button>
+            </div>
+
+            <div class="admin-filter-group">
+              <label for="adminStatusFilter" class="filter-label">Status:</label>
+              <select id="adminStatusFilter" class="admin-select-filter">
+                <option value="all">All Statuses</option>
+                <option value="Due">Payment Due</option>
+                <option value="Paid">Paid in Full</option>
+                <option value="Overdue">Overdue (&gt;60d)</option>
+                <option value="Plan Active">Payment Plan Active</option>
+              </select>
+            </div>
+
+            <div class="admin-filter-group">
+              <label for="adminAgingFilter" class="filter-label">Aging:</label>
+              <select id="adminAgingFilter" class="admin-select-filter">
+                <option value="all">All Aging Buckets</option>
+                <option value="0-30">Current (0-30 Days)</option>
+                <option value="31-60">31-60 Days</option>
+                <option value="61-90">61-90 Days</option>
+                <option value="90+">90+ Days</option>
+              </select>
+            </div>
+
+            <button type="button" id="adminResetFiltersBtn" class="btn-reset-filters">
+              Reset Filters
+            </button>
+          </div>
+        </div>
+
+        <!-- Batch Action Floating / Sticky Toolbar -->
+        <div class="admin-batch-bar" id="adminBatchBar" style="display: none;">
+          <div class="batch-bar-left">
+            <span class="batch-count-badge" id="batchSelectedCount">0</span>
+            <span class="batch-count-label">Statements Selected</span>
+          </div>
+          <div class="batch-bar-actions">
+            <button type="button" class="btn-batch-action" id="batchResendBtn">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 2L11 13"/>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+              </svg>
+              <span>Resend e-Statements</span>
+            </button>
+            <button type="button" class="btn-batch-action" id="batchExportBtn">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              <span>Export Selected CSV</span>
+            </button>
+            <button type="button" class="btn-batch-action" id="batchMarkPaidBtn">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              <span>Mark Settled</span>
+            </button>
+            <button type="button" class="btn-batch-cancel" id="batchDeselectBtn">Deselect All</button>
+          </div>
+        </div>
+
+        <!-- Master Patient Statement Roster Table -->
+        <div class="admin-table-card">
+          <div class="table-card-topbar">
+            <div>
+              <h2 class="table-card-heading">Active Patient Statement Roster</h2>
+              <p class="table-card-sub" id="tableRosterMeta">Showing all verified statements across connected clinics</p>
+            </div>
+            <div class="table-counter-badge" id="tableCountBadge">12 Statements Loaded</div>
           </div>
 
           <div class="table-responsive">
-            <table class="dashboard-statement-table">
+            <table class="admin-roster-table">
               <thead>
                 <tr>
-                  <th>Date</th>
-                  <th>CPT &amp; Service Description</th>
-                  <th>Attending Provider</th>
-                  <th>Billed</th>
-                  <th>Insurance Paid</th>
-                  <th>Adjustment</th>
-                  <th>Patient Responsibility</th>
+                  <th class="th-checkbox">
+                    <input type="checkbox" id="selectAllCheckbox" title="Select All Statements">
+                  </th>
+                  <th>Statement # &amp; Date</th>
+                  <th>Patient &amp; MRN</th>
+                  <th>Clinic Facility</th>
+                  <th>Total Billed</th>
+                  <th>Ins Paid &amp; Adj</th>
+                  <th>Patient Due</th>
+                  <th>Aging Bucket</th>
+                  <th>Delivery Mode</th>
+                  <th>Status</th>
+                  <th class="th-actions">Admin Actions</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td>10/12/2026</td>
-                  <td><strong>99214</strong> - Comprehensive Office Visit</td>
-                  <td>Dr. Robert Miller, MD</td>
-                  <td>$350.00</td>
-                  <td class="text-green">-$280.00</td>
-                  <td>-$30.00</td>
-                  <td><strong class="text-due">$40.00</strong></td>
-                </tr>
-                <tr>
-                  <td>10/12/2026</td>
-                  <td><strong>80053</strong> - Comprehensive Metabolic Panel</td>
-                  <td>Metro Labs Clinical</td>
-                  <td>$480.00</td>
-                  <td class="text-green">-$360.00</td>
-                  <td>-$45.00</td>
-                  <td><strong class="text-due">$75.00</strong></td>
-                </tr>
-                <tr>
-                  <td>10/12/2026</td>
-                  <td><strong>71046</strong> - Chest Radiography (2 Views)</td>
-                  <td>Diagnostic Radiology Center</td>
-                  <td>$620.00</td>
-                  <td class="text-green">-$465.00</td>
-                  <td>+$75.00</td>
-                  <td><strong class="text-due">$230.00</strong></td>
-                </tr>
+              <tbody id="adminStatementsTbody">
+                <!-- Dynamically populated via script.js -->
               </tbody>
-              <tfoot>
-                <tr>
-                  <td colspan="6" class="text-right"><strong>Total Patient Balance Due:</strong></td>
-                  <td class="text-total">$345.00</td>
-                </tr>
-              </tfoot>
             </table>
           </div>
 
-          <!-- Bottom Notice / Payment Security -->
-          <div class="dashboard-footer-note">
-            <div class="security-note-text">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+          <!-- Empty State -->
+          <div class="admin-table-empty" id="adminTableEmpty" style="display: none;">
+            <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              <line x1="8" y1="11" x2="14" y2="11"/>
+            </svg>
+            <h4>No Patient Statements Found</h4>
+            <p>No billing statements match your current search, clinic, or aging filter criteria.</p>
+            <button type="button" class="btn-reset-filters" id="emptyResetBtn">Reset All Filters</button>
+          </div>
+
+          <!-- Table Footer Pagination / Security -->
+          <div class="admin-table-footer">
+            <span class="footer-records-text" id="footerRecordsCount">Displaying records in real-time</span>
+            <div class="footer-hipaa-seal">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9v-2h2v2zm0-4H9V7h2v5zm4 4h-2v-2h2v2zm0-4h-2V7h2v5z"/>
               </svg>
-              <span>Transactions are encrypted with 256-bit SSL/TLS and processed in compliance with HIPAA &amp; PCI-DSS standards. For billing queries: <strong>contact@us24solutions.com</strong> | <strong>+1-309-364-6427</strong></span>
+              <span>Audit Logged under HIPAA Security Rule (45 CFR § 164.312)</span>
             </div>
           </div>
         </div>
@@ -1097,6 +1308,282 @@
           Print Collection Log
         </button>
         <button type="button" class="btn-primary" id="ackCollectionBtn">Done / Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       ADMIN MODAL 1: STATEMENT DETAIL INSPECTION & AUDIT MODAL
+       ========================================================================== -->
+  <div class="modal-backdrop" id="adminStatementDetailModal" role="dialog" aria-modal="true" aria-labelledby="adminDetailModalTitle" style="display: none;">
+    <div class="modal-dialog modal-large">
+      <div class="modal-header">
+        <div class="modal-badge blue-bg">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <polyline points="10 9 9 9 8 9"/>
+          </svg>
+        </div>
+        <div class="flex-grow">
+          <div class="dash-status-pill blue-pill" id="adminModalClinicPill">Clinic: Namaste</div>
+          <h3 id="adminDetailModalTitle" class="modal-title">Statement Inspection &amp; Ledger Audit</h3>
+          <p class="modal-desc">
+            Statement: <strong id="adminModalStmtNumber">#US-2026-98124</strong> &nbsp;•&nbsp; 
+            Patient: <strong id="adminModalPatientName">Sarah Jenkins</strong> &nbsp;•&nbsp; 
+            MRN: <strong id="adminModalMrn">US-84920</strong>
+          </p>
+        </div>
+        <button type="button" class="close-card-btn" id="closeAdminDetailBtn" aria-label="Close Statement Inspection">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="modal-body modal-scroll">
+        <!-- Patient & Insurance Metadata Cards -->
+        <div class="admin-detail-meta-grid">
+          <div class="detail-meta-card">
+            <div class="detail-meta-heading">Guarantor &amp; Demographics</div>
+            <div class="detail-meta-row"><span>DOB:</span> <strong id="adminModalDob">06/14/1988</strong></div>
+            <div class="detail-meta-row"><span>Contact:</span> <strong id="adminModalPhone">+1 (713) 555-0192</strong></div>
+            <div class="detail-meta-row"><span>Email:</span> <strong id="adminModalEmail">sarah.j***@example.com</strong></div>
+            <div class="detail-meta-row"><span>Statement Date:</span> <strong id="adminModalDate">10/12/2026</strong></div>
+          </div>
+
+          <div class="detail-meta-card">
+            <div class="detail-meta-heading">Insurance Adjudication Info</div>
+            <div class="detail-meta-row"><span>Primary Payer:</span> <strong id="adminModalPayer">BlueCross BlueShield</strong></div>
+            <div class="detail-meta-row"><span>Claim ID:</span> <strong>#CLM-8924019</strong></div>
+            <div class="detail-meta-row"><span>Delivery Channel:</span> <strong id="adminModalDelivery">SMS + Email e-Statement</strong></div>
+            <div class="detail-meta-row"><span>Account Status:</span> <strong id="adminModalStatus" class="text-orange">Payment Due</strong></div>
+          </div>
+
+          <div class="detail-meta-card highlight-card">
+            <div class="detail-meta-heading">Financial Responsibility</div>
+            <div class="detail-meta-row"><span>Total Billed:</span> <strong id="adminModalTotalBilled">$1,450.00</strong></div>
+            <div class="detail-meta-row"><span>Insurance Paid:</span> <strong class="text-green" id="adminModalInsPaid">-$1,105.00</strong></div>
+            <div class="detail-meta-row"><span>Adjustments:</span> <strong id="adminModalAdj">-$30.00</strong></div>
+            <div class="detail-meta-row balance-row"><span>Patient Balance Due:</span> <strong class="text-orange" id="adminModalPatientDue">$345.00</strong></div>
+          </div>
+        </div>
+
+        <!-- Itemized CPT Breakdown -->
+        <h4 style="margin: 22px 0 10px; font-family: var(--font-heading); color: var(--text-main); font-size: 1rem;">
+          Itemized Clinical Services &amp; CPT Adjudication
+        </h4>
+        <div class="table-responsive">
+          <table class="dashboard-statement-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>CPT &amp; Service Description</th>
+                <th>Attending Provider</th>
+                <th>Billed</th>
+                <th>Insurance Paid</th>
+                <th>Adjustment</th>
+                <th>Patient Due</th>
+              </tr>
+            </thead>
+            <tbody id="adminModalCptTbody">
+              <!-- Dynamically populated -->
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="6" class="text-right"><strong>Net Patient Responsibility:</strong></td>
+                <td id="adminModalTfootDue" class="text-total">$345.00</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+
+        <!-- Delivery & Communications Audit Trail -->
+        <h4 style="margin: 24px 0 10px; font-family: var(--font-heading); color: var(--text-main); font-size: 1rem;">
+          Communications &amp; Compliance Audit Trail
+        </h4>
+        <div class="admin-audit-log-box" id="adminModalAuditLog">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn-outline" id="adminModalPrintBtn">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 6 2 18 2 18 9"/>
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+            <rect x="6" y="14" width="12" height="8"/>
+          </svg>
+          Print Statement PDF
+        </button>
+        <button type="button" class="btn-outline" id="adminModalResendBtn">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 2L11 13"/>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+          </svg>
+          Resend e-Statement
+        </button>
+        <button type="button" class="btn-primary" id="adminModalRecordPayBtn">
+          Record Payment
+        </button>
+        <button type="button" class="btn-secondary" id="adminModalCloseBtn">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       ADMIN MODAL 2: BATCH STATEMENT GENERATION
+       ========================================================================== -->
+  <div class="modal-backdrop" id="adminBatchModal" role="dialog" aria-modal="true" aria-labelledby="batchModalTitle" style="display: none;">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div class="modal-badge green-bg">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+        </div>
+        <div class="flex-grow">
+          <h3 id="batchModalTitle" class="modal-title">Generate Statement Batch</h3>
+          <p class="modal-desc">Compile adjudicated claims into patient statements across designated clinics.</p>
+        </div>
+        <button type="button" class="close-card-btn" id="closeBatchBtn" aria-label="Close Batch Window">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <form id="adminBatchForm" onsubmit="return false;">
+          <div class="form-group">
+            <label class="form-label" for="batchClinicTarget">Target Facility Scope</label>
+            <select class="admin-select-filter" id="batchClinicTarget" style="width: 100%;">
+              <option value="all">All Clinics (Namaste, Arra, Icure, HariKrishna, Meyerland)</option>
+              <option value="Namaste">Namaste</option>
+              <option value="Arra">Arra</option>
+              <option value="Icure">Icure</option>
+              <option value="HariKrishna">HariKrishna</option>
+              <option value="Meyerland">Meyerland</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="batchCycleType">Billing Cycle Rule</label>
+            <select class="admin-select-filter" id="batchCycleType" style="width: 100%;">
+              <option value="eom">End-of-Month Adjudicated Cycle (Default)</option>
+              <option value="biweekly">Bi-Weekly Rolling Run</option>
+              <option value="overdue">Follow-Up Run: Overdue &gt;30 Days</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="batchMinBalance">Minimum Balance Threshold ($)</label>
+            <input type="number" id="batchMinBalance" class="form-input" value="5.00" min="1.00" step="1.00" placeholder="5.00">
+            <span class="field-hint">Excludes trivial balances under minimum threshold to reduce delivery overhead.</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Delivery Dispatch Channels</label>
+            <label class="custom-checkbox-label" style="margin-bottom: 8px;">
+              <input type="checkbox" checked id="batchChannelSms">
+              <span class="custom-checkbox-box"></span>
+              <span>Secure SMS with Mobile One-Tap Pay Link</span>
+            </label>
+            <label class="custom-checkbox-label" style="margin-bottom: 8px;">
+              <input type="checkbox" checked id="batchChannelEmail">
+              <span class="custom-checkbox-box"></span>
+              <span>HIPAA Encrypted Email e-Statement</span>
+            </label>
+            <label class="custom-checkbox-label">
+              <input type="checkbox" id="batchChannelPaper">
+              <span class="custom-checkbox-box"></span>
+              <span>First-Class Mail Paper Fallback (for opt-outs)</span>
+            </label>
+          </div>
+
+          <!-- Animated Progress Container during run -->
+          <div class="batch-progress-box" id="batchProgressBox" style="display: none;">
+            <div class="batch-progress-status" id="batchProgressStatus">Compiling encounters...</div>
+            <div class="batch-progress-track">
+              <div class="batch-progress-fill" id="batchProgressFill"></div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn-secondary" id="cancelBatchBtn">Cancel</button>
+        <button type="button" class="btn-primary" id="startBatchBtn">
+          Generate &amp; Dispatch Batch
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       ADMIN MODAL 3: RECORD ADMINISTRATIVE PAYMENT
+       ========================================================================== -->
+  <div class="modal-backdrop" id="adminRecordPayModal" role="dialog" aria-modal="true" aria-labelledby="payModalTitle" style="display: none;">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div class="modal-badge green-bg">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+            <line x1="1" y1="10" x2="23" y2="10"/>
+          </svg>
+        </div>
+        <div class="flex-grow">
+          <h3 id="payModalTitle" class="modal-title">Record Patient Payment</h3>
+          <p class="modal-desc">Manual payment entry by billing administrator for offline or front-desk collection.</p>
+        </div>
+        <button type="button" class="close-card-btn" id="closeRecordPayBtn" aria-label="Close Payment Window">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <form id="recordPayForm" onsubmit="return false;">
+          <div class="record-pay-summary">
+            <div>Statement: <strong id="recPayStmtNum">#US-2026-98124</strong></div>
+            <div>Patient: <strong id="recPayPatientName">Sarah Jenkins</strong></div>
+            <div>Outstanding Due: <strong class="text-orange" id="recPayBalanceDue">$345.00</strong></div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="recPayAmount">Payment Amount ($)</label>
+            <input type="number" id="recPayAmount" class="form-input" value="345.00" min="1.00" step="0.01">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="recPayMethod">Payment Channel / Method</label>
+            <select class="admin-select-filter" id="recPayMethod" style="width: 100%;">
+              <option value="card">Credit / Debit Card (Front-Desk / Phone)</option>
+              <option value="ach">Bank ACH / EFT Debit</option>
+              <option value="check">Physical Check / Lockbox</option>
+              <option value="cash">Front Desk Cash</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="recPayRef">Reference / Check / Auth Number</label>
+            <input type="text" id="recPayRef" class="form-input" placeholder="e.g. AUTH-941829 or Check #4812">
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn-secondary" id="cancelRecordPayBtn">Cancel</button>
+        <button type="button" class="btn-primary" id="submitRecordPayBtn">
+          Post Payment &amp; Settle
+        </button>
       </div>
     </div>
   </div>
